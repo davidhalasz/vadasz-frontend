@@ -1,0 +1,22 @@
+.transitionode-appear,
+.transitionode-enter {
+  opacity: 0;
+  transform: scale(0.1);
+  transform-origin: 10% 20%;
+}
+
+.transitionode-appear-active,
+.transitionode-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.transitionode-exit {
+  opacity: 1;
+}
+.transitionode-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 400ms, transform 400ms;
+}

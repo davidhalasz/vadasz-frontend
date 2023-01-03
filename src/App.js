@@ -1,57 +1,82 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { Suspense } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import "./App.css";
+import LoadingSpinner from "./shared/LoadingSpinner";
+
+//import Login from "./pages/Auth/Login";
+//import Dashboard from "./pages/Dashboard";
+//import Register from "./pages/Auth/Register";
+//import Home from "./pages/Home";
+//import ProductList from "./components/dashboard/ProductList";
+//import AddProduct from "./components/dashboard/AddProduct";
+//import UserProfile from "./components/dashboard/UserProfile";
+//import ShowProduct from "./components/dashboard/ShowProduct";
+//import EditProduct from "./components/dashboard/EditProduct";
+//import Products from "./pages/Products";
+//import MainProductList from "./components/MainProductList";
+
+const Login = React.lazy(() => import("./pages/Auth/Login"));
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const Register = React.lazy(() => import("./pages/Auth/Register"));
+const AddProduct = React.lazy(() =>
+  import("./components/dashboard/AddProduct")
+);
+const ProductList = React.lazy(() =>
+  import("./components/dashboard/ProductList")
+);
+const UserProfile = React.lazy(() =>
+  import("./components/dashboard/UserProfile")
+);
+const ShowProduct = React.lazy(() =>
+  import("./components/dashboard/ShowProduct")
+);
+const EditProduct = React.lazy(() =>
+  import("./components/dashboard/EditProduct")
+);
+const Home = React.lazy(() => import("./pages/Home"));
+const Products = React.lazy(() => import("./pages/Products"));
+const MainProductList = React.lazy(() =>
+  import("./components/MainProductList")
+);
 
 function App() {
+  let routes = createBrowserRouter([
+    { path: "/", element: <Home /> },
+    { path: "/bejelentkezes", element: <Login /> },
+    { path: "/regisztracio", element: <Register /> },
+    {
+      path: "/hirdetesek",
+      element: <Products />,
+      children: [
+        { path: "", element: <MainProductList /> },
+        { path: ":uuid", element: <ShowProduct /> },
+      ],
+    },
+    {
+      path: "/kezelofelulet",
+      element: <Dashboard />,
+      children: [
+        { path: "feltoltott-hirdetesek", element: <ProductList /> },
+        { path: "uj-hirdetes", element: <AddProduct /> },
+        { path: "hirdetes-szerkesztese/:uuid", element: <EditProduct /> },
+        { path: "adataim", element: <UserProfile /> },
+        { path: "hirdetes/:uuid", element: <ShowProduct /> },
+      ],
+    },
+  ]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <main>
+      <Suspense
+        fallback={
+          <div className="center">
+            <LoadingSpinner />
+          </div>
+        }
+      >
+        <RouterProvider router={routes} />
+      </Suspense>
+    </main>
   );
 }
 
