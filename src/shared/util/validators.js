@@ -5,10 +5,14 @@ const VALIDATOR_TYPE_MIN = "MIN";
 const VALIDATOR_TYPE_MAX = "MAX";
 const VALIDATOR_TYPE_EMAIL = "EMAIL";
 const VALIDATOR_TYPE_FILE = "FILE";
+const VALIDATOR_TYPE_TELEPHONE = 'TELEPHONE';
+const VALIDATOR_TYPE_YEAR = 'YEAR';
 
 export const VALIDATOR_REQUIRE = () => ({ type: VALIDATOR_TYPE_REQUIRE });
 export const VALIDATOR_FILE = () => ({ type: VALIDATOR_TYPE_FILE });
+export const VALIDATOR_TELEPHONE = () => ({type: VALIDATOR_TYPE_TELEPHONE})
 export const VALIDATOR_EMAIL = () => ({ type: VALIDATOR_TYPE_EMAIL });
+export const VALIDATOR_YEAR = () => ({type: VALIDATOR_TYPE_YEAR});
 export const VALIDATOR_MINLENGTH = (val) => ({
   type: VALIDATOR_TYPE_MINLENGTH,
   val: val,
@@ -17,6 +21,8 @@ export const VALIDATOR_MAXLENGTH = (val) => ({
   type: VALIDATOR_TYPE_MAXLENGTH,
   val: val,
 });
+
+
 
 export const validate = (value, validators) => {
   let isValid = true;
@@ -37,7 +43,13 @@ export const validate = (value, validators) => {
       isValid = isValid && +value <= validator.val;
     }
     if (validator.type === VALIDATOR_TYPE_EMAIL) {
-      isValid = isValid && /^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
+      isValid = isValid && /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
+    }
+    if (validator.type === VALIDATOR_TYPE_TELEPHONE) {
+      isValid = (isValid && value.trim().length > 10) || (isValid && value.trim().length === 0);
+    }
+    if (validator.type === VALIDATOR_TYPE_YEAR) {
+      isValid = (isValid && value.trim().length === 4) || (isValid && value.trim().length === 0);
     }
   }
   return isValid;

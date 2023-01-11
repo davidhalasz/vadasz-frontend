@@ -36,51 +36,51 @@ const CategoryFilter = (props) => {
       </div>
       <div>
         <FilterButton
-          value="fegyverek"
+          value="Fegyverek"
           title="fegyverek"
-          activated={filters.includes("fegyverek")}
+          activated={filters.includes("Fegyverek")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="lőszerek"
+          value="Lőszerek"
           title="lőszerek"
-          activated={filters?.includes("lőszerek")}
+          activated={filters?.includes("Lőszerek")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="optikák"
+          value="Optikák"
           title="optikák"
-          activated={filters?.includes("optikák")}
+          activated={filters?.includes("Optikák")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="öltözékek"
+          value="Őltözékek"
           title="öltözékek"
-          activated={filters?.includes("öltözékek")}
+          activated={filters?.includes("Őltözékek")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="vadászkutyák"
+          value="Vadászkutyák"
           title="vadászkutyák"
-          activated={filters?.includes("vadászkutyák")}
+          activated={filters?.includes("Vadászkutyák")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="járművek"
+          value="Járművek"
           title="járművek"
-          activated={filters?.includes("járművek")}
+          activated={filters?.includes("Járművek")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="szolgáltatások"
+          value="Szolgáltatások"
           title="szolgáltatások"
-          activated={filters?.includes("szolgáltatások")}
+          activated={filters?.includes("Szolgáltatások")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="kellékek"
+          value="Kellékek"
           title="kellékek"
-          activated={filters?.includes("kellékek")}
+          activated={filters?.includes("Kellékek")}
           onSaveData={addCategoryFilterHandler}
         />
       </div>

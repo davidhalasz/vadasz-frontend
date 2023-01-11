@@ -4,13 +4,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ImageUpload from "../../shared/FormElements/ImageUpload";
 import Input from "../../shared/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
-import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../shared/util/validators";
+import { VALIDATOR_YEAR, VALIDATOR_REQUIRE } from "../../shared/util/validators";
+import jsoncities from "../../shared/cities";
 
 const activeImg = "grayscale object-cover object-center w-full h-full"
 const deactivateImg = "object-cover object-center w-full h-full"
 
 const deleteBtn = "w-full bg-customRed text-white";
 const undeleteBtn = "w-full bg-customBlue text-white";
+
+const CAT_FEGYVEREK = ["Golyós puska", "Sörétes puska","Vegyescsövű puska", "Maroklőfegyver", "Egyéb fegyverek"];
+const CAT_OPTIKAK = ["Távcsövek", "Éjjellátó távcső", "Hőkamerák", "Vadkamera"];
 
 
 const EditProduct = (props) => {
@@ -26,27 +30,55 @@ const EditProduct = (props) => {
   const [deletedImages, setDeletedImages] = useState([]);
   const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
-  const [msg, setMsg] = useState("");
+  
+  const [featured, setFeatured] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrls, setPreviewUrls] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(prod.category);
+  const [isValidForms, setIsValidForm] = useState(false);
   const [formState, inputHandler] = useForm(
     {
       title: {
-        value: "",
-        isValid: false,
+        value: prod.title,
+        isValid: true,
       },
       price: {
-        value: "",
-        isValid: false,
+        value: prod.price.toLocaleString(),
+        isValid: true,
       },
       desc: {
-        value: "",
-        isValid: false,
+        value: prod.desc,
+        isValid: true,
       },
-    },
-    false
+    }, true
   );
+  
+  const jsonSavedCity = JSON.parse(prod.place);
+  const cityIndex = jsoncities.findIndex(function(item, i) {
+    return item.nev === jsonSavedCity.nev;
+  });
+
+  const initSelectValue = {
+    selectCity: {
+      value: cityIndex,
+      isTouched: true,
+      isValid: true,
+      errorMsg: "Hely kiválasztása kötelező!",
+    },
+    selectCondition: {
+      value: prod.condition,
+      isTouched: true,
+      isValid: true,
+      errorMsg: "Állapot kiválasztása kötelező!",
+    },
+    selectCategory: {
+      value: prod.subCategory ? prod.subCategory : prod.category,
+      isTouched: true,
+      isValid: true,
+      errorMsg: "Kategória kiválasztása kötelező!",
+    },
+  };
+
+  const [selectForm, setSelectForm] = useState(initSelectValue);
 
   const handleFileRead = (e) => {
     const content = fileReader.result;
@@ -71,37 +103,29 @@ const EditProduct = (props) => {
     }
   }, [selectedFile, images, previewUrls]);
 
-  const submitFormHandler = async (event) => {
-    event.preventDefault();
-    const desc = formState.inputs.desc.value;
-    const title = formState.inputs.title.value;
-    const price = formState.inputs.price.value;
-   
-    const formData = new FormData();
-    images.forEach((image, index) => {
-      if(newImages[index] === false) {
-        formData.append('files', image);
-      }
-    });
-    formData.append('title', title);
-    formData.append('desc', desc);
-    formData.append('price', price);
-    formData.append('category', selectedValue);
-    formData.append('deletedImages', deletedImages.join(', '));
-  
-    try {
-      await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/product/${prod.uuid}`, formData);
-      navigate('/kezelofelulet/feltoltott-hirdetesek');
-    } catch (error) {
-        if(error.response) {
-          setMsg(error.response.data.msg);
-          console.log(error.response.data.msg);
-        }
-    }
+  const checkboxHandler = () => {
+    setFeatured(!featured);
   };
 
   const handleChangeSelectedValue = (e) => {
-    setSelectedValue(e.target.value);
+    setSelectForm((prevState) => ({
+      ...prevState,
+      [e.target.name]: {
+        ...prevState[e.target.name],
+        value: e.target.value,
+        isValid: true,
+      },
+    }));
+  };
+
+  const handleSelectError = (e) => {
+    setSelectForm((prevState) => ({
+      ...prevState,
+      [e.target.name]: {
+        ...prevState[e.target.name],
+        isTouched: true,
+      },
+    }));
   };
 
   const handleSavedImages = (img) => {
@@ -123,16 +147,82 @@ const EditProduct = (props) => {
     });
   }
 
+  const checkValidation = () => {
+    if (
+      formState.inputs.title.isValid &&
+      formState.inputs.desc.isValid &&
+      formState.inputs.price.isValid &&
+      selectForm.selectCategory.isValid &&
+      selectForm.selectCity.isValid &&
+      selectForm.selectCondition.isValid
+    ) {
+      setIsValidForm(true);
+    } else {
+      setIsValidForm(false);
+    }
+  };
+
+  useEffect(() => {
+    checkValidation();
+  }, [formState, selectForm, isValidForms]);
+
+  
+
+  const submitFormHandler = async (event) => {
+    event.preventDefault();
+    const desc = formState.inputs.desc.value;
+    const title = formState.inputs.title.value;
+    const priceStr = formState.inputs.price.value;
+    const price = parseInt(priceStr.replaceAll(/\s/g, ""));
+    const madeYear = formState.inputs.madeYear.value;
+    const city = jsoncities[parseInt(selectForm.selectCity.value)];
+    let subCategory = '';
+    let category = selectForm.selectCategory.value;
+
+    if(CAT_FEGYVEREK.includes(category)) {
+      subCategory = category;
+      category = "Fegyverek";
+    }
+
+    if(CAT_OPTIKAK.includes(category)) {
+      subCategory = category;
+      category = "Optikák";
+    }
+   
+    const formData = new FormData();
+    images.forEach((image, index) => {
+      if(newImages[index] === false) {
+        formData.append('files', image);
+      }
+    });
+    formData.append('title', title);
+    formData.append('desc', desc);
+    formData.append('price', price);
+    formData.append("category", category);
+    formData.append("subCategory", subCategory);
+    formData.append("featured", featured);
+    formData.append("condition", selectForm.selectCondition.value);
+    formData.append("place", JSON.stringify(city));
+    formData.append("madeYear", madeYear);
+    formData.append('deletedImages', deletedImages.join(', '));
+  
+    try {
+      await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/product/${prod.uuid}`, formData);
+      navigate('/kezelofelulet/feltoltott-hirdetesek');
+    } catch (error) {
+        console.log(error);
+    }
+  };
+
   return (
     <Fragment>
       <div className="w-full text-center p-4 text-customBlue font-bold text-2xl">
-        <h1 className="text-customBlue">Hirdetés szerkesztése</h1>
+        <h1 className="text-customBlue">Új hirdetés hozzáadása</h1>
       </div>
       <div className="mx-auto w-10/12">
-        {msg && <p>{msg}</p>}
         <form onSubmit={submitFormHandler}>
           <div className="flex flex-wrap -mx-4">
-            <div className="w-full md:w-1/2 lg:w-1/3 px-4">
+            <div className="w-full md:w-1/2 lg:w-1/4 px-4">
               <div className="mb-8">
                 <div className="form-control">
                   <label
@@ -143,37 +233,158 @@ const EditProduct = (props) => {
                   </label>
                   <select
                     onChange={handleChangeSelectedValue}
-                    defaultValue={selectedValue}
-                    className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    name="category"
-                    id="category"
+                    defaultValue={selectForm.selectCategory.value}
+                    className={`shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                      !selectForm.selectCategory.isValid &&
+                      selectForm.selectCategory.isTouched &&
+                      "border-red-500"
+                    }`}
+                    name="selectCategory"
+                    id="selectCategory"
+                    onBlur={handleSelectError}
                   >
-                    <option value="fegyverek">Fegyverek</option>
-                    <option value="lőszerek">Lőszerek</option>
-                    <option value="optikák">Optikák</option>
-                    <option value="öltözékek">Öltözékek</option>
-                    <option value="vadászkutyák">Vadászkutyák</option>
-                    <option value="járművek">Járművek</option>
-                    <option value="szolgáltatások">Szolgáltatások</option>
-                    <option value="kellékek">Kellékek</option>
+                    <option disabled value="">
+                      Válassz kategóriát
+                    </option>
+                    <optgroup label="Fegyverek">
+                      <option value="Golyós puska">Golyós puska</option>
+                      <option value="Sörétes puska">Sörétes puska</option>
+                      <option value="Vegyescsövű puska">
+                        Vegyescsövű puska
+                      </option>
+                      <option value="Maroklőfegyver">Maroklőfegyver</option>
+                      <option value="Egyéb fegyverek">Egyéb fegyverek</option>
+                    </optgroup>
+
+                    <option value="Lőszerek">Lőszerek</option>
+                    <optgroup label="Optikák">
+                      <option value="Távcsövek">Távcsövek</option>
+                      <option value="Éjjellátó távcső">Éjjellátó távcső</option>
+                      <option value="Hőkamerák">Hőkamerák</option>
+                      <option value="Vadkamera">Vadkamera</option>
+                    </optgroup>
+                    <option value="Ruházat">Ruházat</option>
+                    <option value="Vadászkutyák">Vadászkutyák</option>
+                    <option value="Járművek">Járművek</option>
+                    <option value="Szolgáltatások">Szolgáltatások</option>
+                    <option value="Kellékek">Kellékek</option>
                   </select>
+                  {!selectForm.selectCategory.isValid &&
+                    selectForm.selectCategory.isTouched && (
+                      <p className="text-red-500">
+                        {selectForm.selectCategory.errorMsg}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-1/2 lg:w-1/3 px-4">
+            <div className="w-full md:w-1/2 lg:w-1/4 px-4">
               <div className="mb-8">
                 <Input
                   id="price"
-                  type="number"
+                  type="text"
                   label="Ár"
                   placeholder="Ár"
                   element="input"
                   validators={[VALIDATOR_REQUIRE()]}
                   errorText="Ár megadása kötelező"
                   onInput={inputHandler}
-                  value={prod.price}
-                  valid={true}
+                  value={formState.inputs.price.value}
+                  valid={formState.inputs.price.isValid}
                 />
+              </div>
+            </div>
+            <div className="w-full md:w-1/2 lg:w-1/4 px-4">
+              <div className="mb-8">
+                <Input
+                  id="madeYear"
+                  type="number"
+                  label="Gyártási év"
+                  placeholder="Gyártási év"
+                  element="input"
+                  validators={[VALIDATOR_YEAR()]}
+                  onInput={inputHandler}
+                  errorText="Nem valid évszám! 0 vagy 4 jegyú számjegynek kell lennie."
+                  value={prod.madeYear}
+                />
+              </div>
+            </div>
+            <div className="w-full md:w-1/2 lg:w-1/4 px-4">
+              <div className="mb-8">
+                <div className="form-control">
+                  <label
+                    className="block text-customBlue text-sm font-bold mb-2"
+                    htmlFor="selectCondition"
+                  >
+                    Állapot
+                  </label>
+                  <select
+                    onChange={handleChangeSelectedValue}
+                    defaultValue={selectForm.selectCondition.value}
+                    className={`shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                      !selectForm.selectCondition.isValid &&
+                      selectForm.selectCondition.isTouched &&
+                      "border-red-500"
+                    }`}
+                    name="selectCondition"
+                    id="selectCondition"
+                    onBlur={handleSelectError}
+                    value={props.condition}
+                  >
+                    <option disabled value="">
+                      Válassz állapotot
+                    </option>
+                    <option value="új">Új</option>
+                    <option value="használt">Használt</option>
+                  </select>
+                  {!selectForm.selectCondition.isValid &&
+                    selectForm.selectCondition.isTouched && (
+                      <p className="text-red-500">
+                        {selectForm.selectCondition.errorMsg}
+                      </p>
+                    )}
+                </div>
+              </div>
+            </div>
+            <div className="w-full md:w-1/2 lg:w-1/4 px-4">
+              <div className="mb-8">
+                <div className="form-control">
+                  <label
+                    className="block text-customBlue text-sm font-bold mb-2"
+                    htmlFor="selectCity"
+                  >
+                    Termék helye
+                  </label>
+                  <select
+                    onChange={handleChangeSelectedValue}
+                    defaultValue={selectForm.selectCity.value}
+                    className={`shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                      !selectForm.selectCity.isValid &&
+                      selectForm.selectCity.isTouched &&
+                      "border-red-500"
+                    }`}
+                    name="selectCity"
+                    id="selectCity"
+                    onBlur={handleSelectError}
+                  >
+                    <option disabled value="">
+                      Válaszd ki a települést
+                    </option>
+                    {jsoncities.map((city, index) => {
+                      return (
+                        <option key={index} value={index}>
+                          {city.nev}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  {!selectForm.selectCity.isValid &&
+                    selectForm.selectCity.isTouched && (
+                      <p className="text-red-500">
+                        {selectForm.selectCity.errorMsg}
+                      </p>
+                    )}
+                </div>
               </div>
             </div>
             <div className="w-full px-4">
@@ -184,14 +395,15 @@ const EditProduct = (props) => {
                   label="Cím"
                   placeholder="Cím"
                   element="input"
-                  validators={[VALIDATOR_MINLENGTH(5)]}
+                  validators={[VALIDATOR_REQUIRE()]}
                   errorText="Cím megadása kötelező"
                   onInput={inputHandler}
-                  value={prod.title}
-                  valid={true}
+                  value={formState.inputs.title.value}
+                  valid={formState.inputs.title.isValid}
                 />
               </div>
             </div>
+
             <div className="w-full px-4">
               <div className="mb-8">
                 <Input
@@ -200,33 +412,34 @@ const EditProduct = (props) => {
                   label="Leírás"
                   placeholder="Leírás"
                   element="textaera"
-                  validators={[VALIDATOR_MINLENGTH(5)]}
+                  validators={[VALIDATOR_REQUIRE()]}
                   errorText="Leírás megadása kötelező"
                   onInput={inputHandler}
-                  value={prod.desc}
-                  valid={true}
+                  value={formState.inputs.desc.value}
+                  valid={formState.inputs.desc.isValid}
                 />
               </div>
             </div>
             <div className="w-full px-4">
-              <div className="mb-5 w-fit flex">
+              <div className="mb-5 w-fit flex content-center justify-center">
                 <label
-                  htmlFor="kiemelt"
-                  className="font-medium text-base text-black block mb-3"
+                  htmlFor="featured"
+                  className="font-medium text-base text-black inline-block inline-block"
                 >
                   Kiemelt hirdetés
                 </label>
                 <input
                   type="checkbox"
-                  name="kiemelt"
-                  value="1"
-                  className="border-[1.5px] border-form-stroke ml-2 p-2 font-medium text-body-color placeholder-body-color outline-none focus:border-primary active:border-primary transition disabled:bg-[#F5F7FD] disabled:cursor-default"
+                  name="featured"
+                  checked={featured}
+                  onChange={checkboxHandler}
+                  className="border-[1.5px] border-form-stroke block ml-2 p-2 font-medium text-body-color placeholder-body-color outline-none focus:border-primary active:border-primary transition disabled:bg-[#F5F7FD] disabled:cursor-default"
                 />
               </div>
             </div>
-            <div className="w-full md:w-1/2 lg:w-1/3 px-4">
+            <div className="w-full px-4">
               <p className="font-medium text-base text-black mb-3">Képek szerkesztése</p>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-wrap gap-2 w-full">
               {savedImages && savedImages.map((el, index) => (
                   <div
                     key={index}
@@ -266,14 +479,23 @@ const EditProduct = (props) => {
               </div>
             </div>
           </div>
-          <div className="row">
+          <div className="row py-4">
             <div className="col-md-12 text-right">
-              <button
-                type="submit"
-                className="px-4 bg-customBlue rounded-md text-white text-base px-5 py-2.5"
-              >
-                Változtatások mentése
-              </button>
+            {isValidForms ? (
+                <button
+                  type="submit"
+                  className="px-4 bg-customBlue rounded-md text-white text-base px-5 py-2.5"
+                >
+                  Változtatások mentése
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="px-4 bg-slate-200 rounded-md text-white text-base px-5 py-2.5"
+                >
+                  Változtatások mentése
+                </button>
+              )}
             </div>
           </div>
         </form>

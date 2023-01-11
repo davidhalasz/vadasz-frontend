@@ -15,6 +15,7 @@ const Products = () => {
     prevImage,
   } = useViewer();
 
+
   return (
     <ImageViewerContext.Provider
       value={{
@@ -29,7 +30,7 @@ const Products = () => {
     >
       <div className="grid grid-cols-6 h-screen w-full">
         <FilterSidebar />
-        <div className="h-full w-full col-span-5 bg-white px-8 pt-4">
+        <div className="h-full w-full col-span-5 bg-white">
           <Outlet />
         </div>
         {display && <ImageViewer />}

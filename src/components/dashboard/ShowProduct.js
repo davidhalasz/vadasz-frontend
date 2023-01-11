@@ -1,16 +1,40 @@
-import { useContext } from "react";
-import { useLocation } from "react-router";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { ImageViewerContext } from "../../context/ImageViewerContext";
 
-const ShowProduct = (props) => {
-  let location = useLocation();
-  const prod = location.state.product;
+const ShowProduct = () => {
   const { toggleDisplay, selectImage } = useContext(ImageViewerContext);
+  const { uuid } = useParams();
+  const [product, setProduct] = useState("");
 
-  let images;
-  if (prod.images) {
-    images = prod.images.split(", ");
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/product/${uuid}`
+        );
+        setProduct(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getProduct();
+  }, [uuid]);
+
+  let images = [];
+  if (product.images) {
+    images = product.images.split(", ");
+    console.log("images: " + images);
   }
+
+  const getPlace = (jsonStr) => {
+    if (jsonStr) {
+      const json = JSON.parse(jsonStr);
+      return `${json.nev} (${json.megye} vármegye)`;
+    }
+  };
 
   const getArrayOfImages = () => {
     if (images) {
@@ -39,8 +63,10 @@ const ShowProduct = (props) => {
   };
 
   return (
-    <div className="relative pt-4 px-8">
-      <h1 className="font-bold text-customBlue text-2xl py-8">{prod.title}</h1>
+    <div className="relative pt-4 pl-8">
+      <h1 className="font-bold text-customBlue text-2xl py-8">
+        {product.title}
+      </h1>
       <div className="flex gap-3">
         <div className="w-3/12">
           <div className="w-full">
@@ -49,7 +75,7 @@ const ShowProduct = (props) => {
               alt="avat"
               className="w-full aspect-square object-cover"
               src={
-                images
+                images[0]
                   ? `${process.env.REACT_APP_ASSET_URL}/${images[0]}`
                   : "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Deer_%28example%29.svg/1024px-Deer_%28example%29.svg.png?20180723123450"
               }
@@ -57,24 +83,60 @@ const ShowProduct = (props) => {
           </div>
           <div className="grid grid-cols-3 gap-1">{getArrayOfImages()}</div>
         </div>
-        <div className="w-9/12 px-8">
-          <h2 className="p-3 bg-customGreen w-fit text-white text-lg font-bold rounded-t-md">
+        <div className="w-9/12 pl-8">
+          <h2 className="p-3 bg-customRed w-full text-white text-lg font-bold rounded-l-md">
             Információk
           </h2>
-          <div className="border-2 border-customGreen rounded-r-md rounded-bl-md mb-4 p-3">
+          <div className="mb-4 p-3">
             <div className="flex flex-col gap-2 pb-4 text-lg">
-              <p>Ár: {prod.price} Ft</p>
-              <p>Helye: Debrecen</p>
-              <p>Kategória: {prod.category}</p>
-              <p>Állapot: új</p>
+              <table class="table-auto">
+                <tbody>
+                  <tr>
+                    <td className="py-2 border-b border-slate-200">Ár</td>
+                    <td className="py-2 border-b border-slate-200">{product.price && product.price.toLocaleString()} Ft</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 border-b border-slate-200">Helye</td>
+                    <td className="py-2 border-b border-slate-200">{getPlace(product.place)}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 border-b border-slate-200">Kategória</td>
+                    <td className="py-2 border-b border-slate-200">{product.category}</td>
+                  </tr>
+                  {product.subCategory && (
+                    <tr>
+                      <td className="py-2 border-b border-slate-200">Alkategória</td>
+                      <td className="py-2 border-b border-slate-200">{product.subCategory}</td>
+                    </tr>
+                  )}
+                  {product.category !== "Vadászkutyák" && (
+                    <tr>
+                      <td className="py-2 border-b border-slate-200">Állapot</td>
+                      <td className="py-2 border-b border-slate-200">{product.condition}</td>
+                    </tr>
+                  )}
+                  {product.madeYear && (
+                    <tr>
+                      <td className="py-2 border-b border-slate-200">
+                        {product.category === "Vadászkutyák"
+                          ? "Születési év"
+                          : "Gyártási év"}
+                      </td>
+                      <td className="py-2 border-b border-slate-200">
+                        {product.madeYear}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
-            <p>{prod.desc}</p>
+            <p>{product.desc}</p>
           </div>
 
-          <h2 className="p-3 bg-customRed w-fit text-white text-lg font-bold rounded-t-md">
-              Kapcsolat
+          <h2 className="p-3 bg-customGreen w-full text-white text-lg font-bold rounded-l-md">
+            Kapcsolat
           </h2>
-          <div className="border-2 border-customRed rounded-r-md rounded-bl-md mb-4 p-3 flex flex-col gap-2 text-lg">
+          <div className="mb-4 p-3 flex flex-col gap-2 text-lg">
             <p>Email: emailœemail.com</p>
             <p>Telefon: +36303692738</p>
           </div>

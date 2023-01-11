@@ -54,7 +54,9 @@ const productSlice = createSlice({
       state.filters.showImage = action.payload.value;
     },
     filteringProducts(state) {
-      let allProducts = [...state.products];
+      let featuredProducts = state.products.filter(p => p.featured === true);
+      let baseProducts = state.products.filter(p => p.featured === false);
+      let allProducts = [...featuredProducts, ...baseProducts];
       let acc = [];
 
       if (state.filters.featured) {

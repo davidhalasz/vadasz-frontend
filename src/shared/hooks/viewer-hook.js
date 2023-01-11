@@ -9,8 +9,6 @@ export const useViewer = () => {
     setDisplay(!display);
   }, [display]);
 
-  console.log(display);
-
   const selectImage = useCallback((imageValue, imagesList) => {
     setCurrentImg(imageValue);
     if (imagesList) {

@@ -1,16 +1,32 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { AlertContext } from "../../context/AlertContext";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const {
+    toggleAlertDisplay,
+    changedData,
+    changedDataHandler,
+    changeCurrentProductId,
+  } = useContext(AlertContext);
 
   useEffect(() => {
     getProducts();
   }, []);
 
+  useEffect(() => {
+    if (changedData) {
+      getProducts();
+      changedDataHandler();
+    }
+  }, [changedData, changedDataHandler]);
+
   const getProducts = async () => {
-    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/my-products`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/my-products`
+    );
     setProducts(response.data);
   };
 
@@ -27,6 +43,16 @@ const ProductList = () => {
     }
     return;
   };
+
+  const alertHandler = (id) => {
+    changeCurrentProductId(id);
+    toggleAlertDisplay();
+  };
+
+  const getCity = (jsonStr) => {
+    const json = JSON.parse(jsonStr);
+    return json.nev;
+  }
 
   return (
     <Fragment>
@@ -59,12 +85,14 @@ const ProductList = () => {
                       <h3 className="font-bold backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
                         {product.title}
                       </h3>
-                      <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md whitespace-nowrap">
-                        {product.price} Ft
-                      </p>
-                      <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
-                        Debrecen
-                      </p>
+                      <div className="flex gap-1">
+                        <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md whitespace-nowrap">
+                          {product.price.toLocaleString()} Ft
+                        </p>
+                        <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
+                          {getCity(product.place)}
+                        </p>
+                      </div>
                     </div>
                     <p className="line-clamp-2 overflow-hidden mb-2">
                       {product.desc}
@@ -87,7 +115,11 @@ const ProductList = () => {
                   </button>
                 </Link>
 
-                <button className="p-2 rounded-md bg-customRed text-md text-white font-bold">
+                <button
+                  type="button"
+                  onClick={() => alertHandler(product.uuid)}
+                  className="p-2 rounded-md bg-customRed text-md text-white font-bold"
+                >
                   Törlés
                 </button>
               </div>

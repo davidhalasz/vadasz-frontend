@@ -17,6 +17,7 @@ import LoadingSpinner from "./shared/LoadingSpinner";
 //import MainProductList from "./components/MainProductList";
 
 const Login = React.lazy(() => import("./pages/Auth/Login"));
+const Activation = React.lazy(() => import("./pages/Auth/Activation"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Register = React.lazy(() => import("./pages/Auth/Register"));
 const AddProduct = React.lazy(() =>
@@ -40,11 +41,13 @@ const MainProductList = React.lazy(() =>
   import("./components/MainProductList")
 );
 
+
 function App() {
   let routes = createBrowserRouter([
     { path: "/", element: <Home /> },
     { path: "/bejelentkezes", element: <Login /> },
     { path: "/regisztracio", element: <Register /> },
+    { path: "/activation/:uuid", element: <Activation />},
     {
       path: "/hirdetesek",
       element: <Products />,

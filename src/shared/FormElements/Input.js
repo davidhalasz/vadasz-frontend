@@ -8,6 +8,7 @@ const inputReducer = (state, action) => {
       return {
         ...state,
         value: action.val,
+        isTouched: true,
         isValid: validate(action.val, action.vaidators),
       };
     case "TOUCH":
@@ -35,17 +36,28 @@ const Input = (props) => {
   }, [id, onInput, value, isValid]);
 
   const changeHandler = (event) => {
-    dispatch({
-      type: "CHANGE",
-      val: event.target.value,
-      vaidators: props.validators,
-    });
+    if (props.id === "price") {
+      let value = event.target.value.replace(/[^0-9]/g, "");
+      dispatch({
+        type: "CHANGE",
+        val: Number(value).toLocaleString(),
+        vaidators: props.validators,
+      });
+    } else {
+      dispatch({
+        type: "CHANGE",
+        val: event.target.value,
+        vaidators: props.validators,
+      });
+    }
   };
 
   const touchHandler = () => {
-    dispatch({
-      type: "TOUCH",
-    });
+    if (props.id !== "madeYear") {
+      dispatch({
+        type: "TOUCH",
+      });
+    }
   };
 
   const element =
@@ -58,7 +70,7 @@ const Input = (props) => {
         type={props.type}
         placeholder={props.placeholder}
         onChange={changeHandler}
-        onBlur={touchHandler}
+        onBlur={() => touchHandler(props.id)}
         value={inputState.value}
       />
     ) : (

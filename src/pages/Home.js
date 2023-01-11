@@ -5,6 +5,7 @@ import { logout, reset } from "../features/authSlice";
 import { getCurrentUser } from "../features/authSlice";
 import { fetchProducts } from "../features/productSlice";
 import ListItem from "../components/ListItem";
+import "./Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Home = () => {
     return (
       <Link to={{ pathname: pathName }} state={state}>
         <div
-          className={`w-full text-xl text-white font-bold p-6 rounded-md bg-${cardColor}`}
+          className={`w-full text-xl text-white font-bold p-6 rounded-l-md bg-${cardColor}`}
         >
           <span className="backdrop-opacity-10 bg-black/20 p-3 rounded-md">
             {title}
@@ -123,7 +124,10 @@ const Home = () => {
               "Vadászkutyák",
               "customGreen"
             )}
-            <Link to={{ pathname: '/hirdetesek' }} state={{category: 'járművek'}}>
+            <Link
+              to={{ pathname: "/hirdetesek" }}
+              state={{ category: "járművek" }}
+            >
               <div
                 className={`w-full text-xl text-white font-bold p-6 rounded-md bg-customPurple`}
               >
@@ -149,64 +153,66 @@ const Home = () => {
       </div>
 
       <div className="grid grid-cols-2 h-screen w-full">
-        <div className="h-full w-full bg-white flex flex-col justify-between">
-          <div>
-            <div className="p-8 font-extrabold">
+        <div className="w-full max-h-screen bg-white justify-between">
+          <div className="h-full flex flex-col">
+            <div className="grow-0 h-fit p-8 font-extrabold">
               <span className="bg-clip-text text-3xl text-transparent bg-customBlue">
                 Kiemelt hirdetések
               </span>
             </div>
-            <div className="flex flex-col mx-3 gap-1">
-              {products.map(
-                (product) =>
-                  product.featured && (
-                    <ListItem
-                      product={product}
-                      key={product.uuid}
-                      cardColor={"customBlue"}
-                    />
-                  )
-              )}
-            </div>
-          </div>
-
-          <div className="w-full pr-14 py-3">
-            <Link to={{ pathname: '/hirdetesek' }} state={{featured: true}}>
-              <div className="w-full text-xl text-white font-bold p-3 rounded-md bg-customOrange flex justify-end">
-                <span className="backdrop-opacity-10 bg-black/10 p-2 rounded-md ">
-                  Még több kiemelt hirdetés
-                </span>
+            <div className="grow h-fit scrollhost_container">
+              <div className="flex flex-col mx-3 gap-1">
+                {products.map(
+                  (product) =>
+                    product.featured && (
+                      <ListItem
+                        product={product}
+                        key={product.uuid}
+                        cardColor={"customBlue"}
+                      />
+                    )
+                )}
               </div>
-            </Link>
+            </div>
+            <div className="grow-0 h-fit w-full pr-14 py-3">
+              <Link to={{ pathname: "/hirdetesek" }} state={{ featured: true }}>
+                <div className="w-full text-xl text-white font-bold p-3 rounded-r-md bg-customOrange flex justify-end">
+                  <span className="backdrop-opacity-10 bg-black/10 p-2 rounded-md ">
+                    Még több kiemelt hirdetés
+                  </span>
+                </div>
+              </Link>
+            </div>{" "}
           </div>
         </div>
-        <div className="h-full w-full bg-customIce flex flex-col justify-between">
-          <div>
-            <div className="p-8 font-extrabold">
+        <div className="w-full max-h-screen bg-customIce justify-between">
+          <div className="h-full flex flex-col">
+            <div className="grow-0 p-8 font-extrabold flex-none">
               <span className="bg-clip-text text-3xl text-transparent bg-customBlue">
                 Legutóbb feltöltött
               </span>
             </div>
-
-            <div className="flex flex-col mx-3">
-              {products.map((product) => (
-                <ListItem
-                  product={product}
-                  key={product.uuid}
-                  cardColor={"customPurple"}
-                />
-              ))}
+            <div className="grow scrollhost_container flex-1">
+              <div className="flex flex-col mx-3 h-fit">
+                {products.map((product) => (
+                  <ListItem
+                    product={product}
+                    key={product.uuid}
+                    cardColor={"customPurple"}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="w-full pl-14 py-3">
-            <Link to={{ pathname: '/hirdetesek' }} state={{reset: true}}>
-            <div className="w-full text-xl text-white font-bold p-3 rounded-md bg-customGreen flex justify-start">
-              <span className="backdrop-opacity-10 bg-black/10 p-2 rounded-md ">
-                Összes mutatása
-              </span>
+            <div className="grow-0 w-full pl-14 py-3 flex-none">
+              <Link to={{ pathname: "/hirdetesek" }} state={{ reset: true }}>
+                <div className="w-full text-xl text-white font-bold p-3 rounded-l-md bg-customGreen flex justify-start">
+                  <span className="backdrop-opacity-10 bg-black/10 p-2 rounded-md ">
+                    Összes mutatása
+                  </span>
+                </div>
+              </Link>
             </div>
-            </Link>
           </div>
         </div>
       </div>

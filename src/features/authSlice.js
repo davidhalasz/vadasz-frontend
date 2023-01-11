@@ -12,7 +12,7 @@ const initialState = {
 export const loginUser = createAsyncThunk("user/loginUser", async(user, thunkAPI) => {
     try {
         const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "/user/belepes", {
-            username: user.username,
+            email: user.email,
             password: user.password
         });
         return response.data;
@@ -34,7 +34,7 @@ export const getCurrentUser = createAsyncThunk("user/getcurrentuser", async(_, t
             const message = error.response.data.msg;
             return thunkAPI.rejectWithValue(message);
         }
-    }
+    } 
 });
 
 export const logout = createAsyncThunk("user/logout", async(_, thunkAPI) => {

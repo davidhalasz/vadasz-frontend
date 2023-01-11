@@ -6,6 +6,10 @@ import { getCurrentUser } from "../features/authSlice";
 import { ImageViewerContext } from "../context/ImageViewerContext";
 import { useViewer } from "../shared/hooks/viewer-hook";
 import ImageViewer from "../components/ImageViewer";
+import { useAlert } from "../shared/hooks/alert-hook";
+import { AlertContext } from "../context/AlertContext";
+import AlertView from "../shared/AlertView";
+import './Home.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,6 +24,15 @@ const Dashboard = () => {
     nextImage,
     prevImage,
   } = useViewer();
+
+  const {
+    toggleAlertDisplay,
+    okSubmit,
+    displayAlert,
+    changedData,
+    changedDataHandler,
+    changeCurrentProductId,
+  } = useAlert();
 
   useEffect(() => {
     dispatch(getCurrentUser());
@@ -43,13 +56,25 @@ const Dashboard = () => {
         prevImage: prevImage,
       }}
     >
-      <div className="grid grid-cols-6 h-screen w-full">
-        <Sidebar />
-        <div className="h-full w-full col-span-5 bg-white">
-          <Outlet />
+      <AlertContext.Provider
+        value={{
+          displayAlert: displayAlert,
+          toggleAlertDisplay: toggleAlertDisplay,
+          okSubmit: okSubmit,
+          changedData: changedData,
+          changedDataHandler: changedDataHandler,
+          changeCurrentProductId: changeCurrentProductId,
+        }}
+      >
+        <div className="grid grid-cols-6 h-screen w-full">
+          <Sidebar />
+          <div className="h-full w-full col-span-5 bg-white scrollhost_container">
+            <Outlet />
+          </div>
+          {display && <ImageViewer />}
+          {displayAlert && <AlertView />}
         </div>
-        {display && <ImageViewer />}
-      </div>
+      </AlertContext.Provider>
     </ImageViewerContext.Provider>
   );
 };
