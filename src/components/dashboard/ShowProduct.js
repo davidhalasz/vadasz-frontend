@@ -63,7 +63,7 @@ const ShowProduct = () => {
   };
 
   return (
-    <div className="relative pt-4 pl-8">
+    <div className="h-screen relative pt-4 pl-8">
       <h1 className="font-bold text-customBlue text-2xl py-8">
         {product.title}
       </h1>

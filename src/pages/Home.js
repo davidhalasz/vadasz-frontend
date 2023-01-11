@@ -96,37 +96,37 @@ const Home = () => {
           <div className="w-full pl-14 py-8 flex flex-col self-center gap-1">
             {linkBtn(
               "/hirdetesek",
-              { category: "fegyverek" },
-              "Fegyverek",
+              { category: "Vadászfegyverek" },
+              "Vadászfegyverek",
               "customOrange"
             )}
             {linkBtn(
               "/hirdetesek",
-              { category: "lőszerek" },
+              { category: "Lőszerek" },
               "Lőszerek",
               "customMint"
             )}
             {linkBtn(
               "/hirdetesek",
-              { category: "optikák" },
+              { category: "Optikák" },
               "Optikák",
               "customYellow"
             )}
             {linkBtn(
               "/hirdetesek",
-              { category: "öltözékek" },
-              "Öltözékek",
+              { category: "Ruházat" },
+              "Ruházat",
               "customRed"
             )}
             {linkBtn(
               "/hirdetesek",
-              { category: "vadászkutyák" },
+              { category: "Vadászkutyák" },
               "Vadászkutyák",
               "customGreen"
             )}
             <Link
               to={{ pathname: "/hirdetesek" }}
-              state={{ category: "járművek" }}
+              state={{ category: "Járművek" }}
             >
               <div
                 className={`w-full text-xl text-white font-bold p-6 rounded-md bg-customPurple`}
@@ -138,13 +138,13 @@ const Home = () => {
             </Link>
             {linkBtn(
               "/hirdetesek",
-              { category: "szolgáltatások" },
-              "Szolgáltatások",
+              { category: "Ingatlanok" },
+              "Ingatlanok",
               "customIce"
             )}
             {linkBtn(
               "/hirdetesek",
-              { category: "kellékek" },
+              { category: "Kellékek" },
               "Kellékek",
               "customRed"
             )}

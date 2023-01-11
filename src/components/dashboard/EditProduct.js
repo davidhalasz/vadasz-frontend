@@ -4,18 +4,26 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ImageUpload from "../../shared/FormElements/ImageUpload";
 import Input from "../../shared/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
-import { VALIDATOR_YEAR, VALIDATOR_REQUIRE } from "../../shared/util/validators";
+import {
+  VALIDATOR_YEAR,
+  VALIDATOR_REQUIRE,
+} from "../../shared/util/validators";
 import jsoncities from "../../shared/cities";
 
-const activeImg = "grayscale object-cover object-center w-full h-full"
-const deactivateImg = "object-cover object-center w-full h-full"
+const activeImg = "grayscale object-cover object-center w-full h-full";
+const deactivateImg = "object-cover object-center w-full h-full";
 
 const deleteBtn = "w-full bg-customRed text-white";
 const undeleteBtn = "w-full bg-customBlue text-white";
 
-const CAT_FEGYVEREK = ["Golyós puska", "Sörétes puska","Vegyescsövű puska", "Maroklőfegyver", "Egyéb fegyverek"];
+const CAT_FEGYVEREK = [
+  "Golyós puska",
+  "Sörétes puska",
+  "Vegyescsövű puska",
+  "Maroklőfegyver",
+  "Egyéb fegyverek",
+];
 const CAT_OPTIKAK = ["Távcsövek", "Éjjellátó távcső", "Hőkamerák", "Vadkamera"];
-
 
 const EditProduct = (props) => {
   let location = useLocation();
@@ -26,11 +34,11 @@ const EditProduct = (props) => {
   }
   const navigate = useNavigate();
   const fileReader = new FileReader();
-  const [savedImages, setSavedImages] = useState(prodImages);
+  const savedImages = prodImages;
   const [deletedImages, setDeletedImages] = useState([]);
   const [images, setImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
-  
+
   const [featured, setFeatured] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrls, setPreviewUrls] = useState([]);
@@ -49,11 +57,12 @@ const EditProduct = (props) => {
         value: prod.desc,
         isValid: true,
       },
-    }, true
+    },
+    true
   );
-  
+
   const jsonSavedCity = JSON.parse(prod.place);
-  const cityIndex = jsoncities.findIndex(function(item, i) {
+  const cityIndex = jsoncities.findIndex(function (item, i) {
     return item.nev === jsonSavedCity.nev;
   });
 
@@ -130,7 +139,7 @@ const EditProduct = (props) => {
 
   const handleSavedImages = (img) => {
     let index = deletedImages.indexOf(img);
-    if(index === -1) {
+    if (index === -1) {
       setDeletedImages([...deletedImages, img]);
     } else {
       let filteredImages = deletedImages.filter((el) => el !== img);
@@ -139,34 +148,30 @@ const EditProduct = (props) => {
   };
 
   const handleNewImages = (index) => {
-   
-    setNewImages(prevState => {
+    setNewImages((prevState) => {
       const newState = [...prevState];
       newState[index] = !newState[index];
       return newState;
     });
-  }
-
-  const checkValidation = () => {
-    if (
-      formState.inputs.title.isValid &&
-      formState.inputs.desc.isValid &&
-      formState.inputs.price.isValid &&
-      selectForm.selectCategory.isValid &&
-      selectForm.selectCity.isValid &&
-      selectForm.selectCondition.isValid
-    ) {
-      setIsValidForm(true);
-    } else {
-      setIsValidForm(false);
-    }
   };
 
   useEffect(() => {
+    const checkValidation = () => {
+      if (
+        formState.inputs.title.isValid &&
+        formState.inputs.desc.isValid &&
+        formState.inputs.price.isValid &&
+        selectForm.selectCategory.isValid &&
+        selectForm.selectCity.isValid &&
+        selectForm.selectCondition.isValid
+      ) {
+        setIsValidForm(true);
+      } else {
+        setIsValidForm(false);
+      }
+    };
     checkValidation();
   }, [formState, selectForm, isValidForms]);
-
-  
 
   const submitFormHandler = async (event) => {
     event.preventDefault();
@@ -176,41 +181,44 @@ const EditProduct = (props) => {
     const price = parseInt(priceStr.replaceAll(/\s/g, ""));
     const madeYear = formState.inputs.madeYear.value;
     const city = jsoncities[parseInt(selectForm.selectCity.value)];
-    let subCategory = '';
+    let subCategory = "";
     let category = selectForm.selectCategory.value;
 
-    if(CAT_FEGYVEREK.includes(category)) {
+    if (CAT_FEGYVEREK.includes(category)) {
       subCategory = category;
       category = "Fegyverek";
     }
 
-    if(CAT_OPTIKAK.includes(category)) {
+    if (CAT_OPTIKAK.includes(category)) {
       subCategory = category;
       category = "Optikák";
     }
-   
+
     const formData = new FormData();
     images.forEach((image, index) => {
-      if(newImages[index] === false) {
-        formData.append('files', image);
+      if (newImages[index] === false) {
+        formData.append("files", image);
       }
     });
-    formData.append('title', title);
-    formData.append('desc', desc);
-    formData.append('price', price);
+    formData.append("title", title);
+    formData.append("desc", desc);
+    formData.append("price", price);
     formData.append("category", category);
     formData.append("subCategory", subCategory);
     formData.append("featured", featured);
     formData.append("condition", selectForm.selectCondition.value);
     formData.append("place", JSON.stringify(city));
     formData.append("madeYear", madeYear);
-    formData.append('deletedImages', deletedImages.join(', '));
-  
+    formData.append("deletedImages", deletedImages.join(", "));
+
     try {
-      await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/product/${prod.uuid}`, formData);
-      navigate('/kezelofelulet/feltoltott-hirdetesek');
+      await axios.patch(
+        `${process.env.REACT_APP_BACKEND_URL}/product/${prod.uuid}`,
+        formData
+      );
+      navigate("/kezelofelulet/feltoltott-hirdetesek");
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
@@ -246,7 +254,7 @@ const EditProduct = (props) => {
                     <option disabled value="">
                       Válassz kategóriát
                     </option>
-                    <optgroup label="Fegyverek">
+                    <optgroup label="Vadászfegyverek">
                       <option value="Golyós puska">Golyós puska</option>
                       <option value="Sörétes puska">Sörétes puska</option>
                       <option value="Vegyescsövű puska">
@@ -266,7 +274,7 @@ const EditProduct = (props) => {
                     <option value="Ruházat">Ruházat</option>
                     <option value="Vadászkutyák">Vadászkutyák</option>
                     <option value="Járművek">Járművek</option>
-                    <option value="Szolgáltatások">Szolgáltatások</option>
+                    <option value="Ingatlanok">Ingatlanok</option>
                     <option value="Kellékek">Kellékek</option>
                   </select>
                   {!selectForm.selectCategory.isValid &&
@@ -438,37 +446,54 @@ const EditProduct = (props) => {
               </div>
             </div>
             <div className="w-full px-4">
-              <p className="font-medium text-base text-black mb-3">Képek szerkesztése</p>
+              <p className="font-medium text-base text-black mb-3">
+                Képek szerkesztése
+              </p>
               <div className="flex flex-wrap gap-2 w-full">
-              {savedImages && savedImages.map((el, index) => (
-                  <div
-                    key={index}
-                    className="border border-mint w-24 h-24 shrink-0"
-                  >
-                    <img
-                      className={ deletedImages.includes(el) ? activeImg : deactivateImg }
-                      src={`${process.env.REACT_APP_ASSET_URL}/${el}`}
-                      alt="public"
-                    />
-                    <button type="button" onClick={() => handleSavedImages(el)} className={ deletedImages.includes(el) ? undeleteBtn : deleteBtn }>
-                      {deletedImages.includes(el) ? "Visszavonás" : "Törlés"}
-                    </button>
-                  </div>
-                ))}
+                {savedImages &&
+                  savedImages.map((el, index) => (
+                    <div
+                      key={index}
+                      className="border border-mint w-24 h-24 shrink-0"
+                    >
+                      <img
+                        className={
+                          deletedImages.includes(el) ? activeImg : deactivateImg
+                        }
+                        src={`${process.env.REACT_APP_ASSET_URL}/${el}`}
+                        alt="public"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleSavedImages(el)}
+                        className={
+                          deletedImages.includes(el) ? undeleteBtn : deleteBtn
+                        }
+                      >
+                        {deletedImages.includes(el) ? "Visszavonás" : "Törlés"}
+                      </button>
+                    </div>
+                  ))}
                 {previewUrls.map((el, index) => (
                   <div
                     key={index}
                     className="border border-mint w-24 h-24 shrink-0"
                   >
                     <img
-                      className={ newImages[index] ? activeImg : deactivateImg }
+                      className={newImages[index] ? activeImg : deactivateImg}
                       src={el}
                       alt="public"
                     />
-                    <button type="button" onClick={() => handleNewImages(index)} className={ newImages[index] ? undeleteBtn : deleteBtn }>
+                    <button
+                      type="button"
+                      onClick={() => handleNewImages(index)}
+                      className={newImages[index] ? undeleteBtn : deleteBtn}
+                    >
                       {newImages[index] ? "Visszavonás" : "Törlés"}
                     </button>
-                    <p className="text-customBlue">{newImages[index].toString()}</p>
+                    <p className="text-customBlue">
+                      {newImages[index].toString()}
+                    </p>
                   </div>
                 ))}
                 <ImageUpload
@@ -481,7 +506,7 @@ const EditProduct = (props) => {
           </div>
           <div className="row py-4">
             <div className="col-md-12 text-right">
-            {isValidForms ? (
+              {isValidForms ? (
                 <button
                   type="submit"
                   className="px-4 bg-customBlue rounded-md text-white text-base px-5 py-2.5"

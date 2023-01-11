@@ -125,22 +125,21 @@ const AddProduct = () => {
     });
   };
 
-  const checkValidation = () => {
-    if (
-      formState.inputs.title.isValid &&
-      formState.inputs.desc.isValid &&
-      formState.inputs.price.isValid &&
-      selectForm.selectCategory.isValid &&
-      selectForm.selectCity.isValid &&
-      selectForm.selectCondition.isValid
-    ) {
-      setIsValidForm(true);
-    } else {
-      setIsValidForm(false);
-    }
-  };
-
   useEffect(() => {
+    const checkValidation = () => {
+      if (
+        formState.inputs.title.isValid &&
+        formState.inputs.desc.isValid &&
+        formState.inputs.price.isValid &&
+        selectForm.selectCategory.isValid &&
+        selectForm.selectCity.isValid &&
+        selectForm.selectCondition.isValid
+      ) {
+        setIsValidForm(true);
+      } else {
+        setIsValidForm(false);
+      }
+    };
     checkValidation();
   }, [formState, selectForm, isValidForms]);
 
@@ -158,7 +157,7 @@ const AddProduct = () => {
 
     if(CAT_FEGYVEREK.includes(category)) {
       subCategory = category;
-      category = "Fegyverek";
+      category = "Vadászfegyverek";
     }
 
     if(CAT_OPTIKAK.includes(category)) {
@@ -228,7 +227,7 @@ const AddProduct = () => {
                     <option disabled value="">
                       Válassz kategóriát
                     </option>
-                    <optgroup label="Fegyverek">
+                    <optgroup label="Vadászegyverek">
                       <option value="Golyós puska">Golyós puska</option>
                       <option value="Sörétes puska">Sörétes puska</option>
                       <option value="Vegyescsövű puska">
@@ -248,7 +247,7 @@ const AddProduct = () => {
                     <option value="Ruházat">Ruházat</option>
                     <option value="Vadászkutyák">Vadászkutyák</option>
                     <option value="Járművek">Járművek</option>
-                    <option value="Szolgáltatások">Szolgáltatások</option>
+                    <option value="Ingatlanok">Ingatlanok</option>
                     <option value="Kellékek">Kellékek</option>
                   </select>
                   {!selectForm.selectCategory.isValid &&

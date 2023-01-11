@@ -1,10 +1,11 @@
-import { Fragment } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { productActions } from "../features/productSlice";
 import CategoryFilter from "./filters/CategoryFilter";
 import FeaturedFilter from "./filters/FeaturedFilter";
 import ImageFilter from "./filters/ImageFilter";
+import SubCategoryFilter from "./filters/SubCategoryFilter";
+import "../shared/scroll.css";
 
 const FilterSidebar = () => {
   const navigate = useNavigate();
@@ -35,9 +36,9 @@ const FilterSidebar = () => {
   }
 
   return (
-    <div className="h-full w-full bg-customYellow p-3 text-customBlue font-bold flex flex-col justify-between">
-      <div className="min-w-full">
-        <button className="flex mb-10" onClick={() => navigateByLocation() }>
+    <div className="max-h-screen col-span-3 w-full bg-customYellow p-3 text-customBlue font-bold flex flex-col justify-between">
+      <div className="h-full flex flex-col min-w-full">
+        <button className="grow-0 h-fit flex mb-10" onClick={() => navigateByLocation() }>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -55,14 +56,15 @@ const FilterSidebar = () => {
           <span className="pl-2">{ location.pathname === "/hirdetesek" ? 'Vissza a főoldalra' : 'Vissza a hirdetésekhez'}</span>
         </button>
         {location.pathname === "/hirdetesek" && (
-          <Fragment>
+          <div className="grow scrollhost_container">
             <p className="text-customBlue text-center mb-4">
               Szűrési feltételek
             </p>
             <CategoryFilter onSaveFilter={saveFilterHandler} />
+            <SubCategoryFilter onSaveFilter={saveFilterHandler}/>
             <FeaturedFilter onFeaturedFilter={saveFeaturedFilterHandler}/>
             <ImageFilter onShowImageFilter={saveImageFilterHandler} />
-          </Fragment>
+          </div>
         )}
       </div>
     </div>

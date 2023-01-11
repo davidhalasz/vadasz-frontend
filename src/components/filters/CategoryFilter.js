@@ -36,9 +36,9 @@ const CategoryFilter = (props) => {
       </div>
       <div>
         <FilterButton
-          value="Fegyverek"
-          title="fegyverek"
-          activated={filters.includes("Fegyverek")}
+          value="Vadászfegyverek"
+          title="vadászfegyverek"
+          activated={filters.includes("Vadászfegyverek")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
@@ -54,8 +54,8 @@ const CategoryFilter = (props) => {
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="Őltözékek"
-          title="öltözékek"
+          value="Ruházat"
+          title="ruházat"
           activated={filters?.includes("Őltözékek")}
           onSaveData={addCategoryFilterHandler}
         />
@@ -72,9 +72,9 @@ const CategoryFilter = (props) => {
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton
-          value="Szolgáltatások"
-          title="szolgáltatások"
-          activated={filters?.includes("Szolgáltatások")}
+          value="Ingatlanok"
+          title="ingatlanok"
+          activated={filters?.includes("Ingatlanok")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton

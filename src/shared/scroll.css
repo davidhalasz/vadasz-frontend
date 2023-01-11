@@ -1,0 +1,18 @@
+.scrollhost_container::-webkit-scrollbar {
+    position: absolute;
+    width: 10px;
+}
+
+.scrollhost_container::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+.scrollhost_container::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+.scrollhost_container:hover::-webkit-scrollbar-thumb {
+    /*background: #4A4A4A; */
+    background: #454952;
+    border-radius: 8px;
+}

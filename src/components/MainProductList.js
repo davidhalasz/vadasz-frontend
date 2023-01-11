@@ -38,6 +38,13 @@ const MainProductList = () => {
     return;
   };
 
+  const getCity = (jsonStr) => {
+    if (jsonStr) {
+      const json = JSON.parse(jsonStr);
+      return json.nev;
+    }
+  };
+
   return (
     <Fragment>
       <div className="text-customBlue h-screen flex flex-col">
@@ -78,11 +85,11 @@ const MainProductList = () => {
                               {product.title}
                             </h3>
                             <div className="flex gap-1">
-                              <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md whitespace-nowrap text-customGreen font-bold">
+                              <p className={`backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md whitespace-nowrap  font-bold ${product.featured ? "text-customBlue" :"text-customGreen"}` }>
                                 {product.price.toLocaleString()} Ft
                               </p>
                               <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
-                                Debrecen
+                                {getCity(product.place)}
                               </p>
                             </div>
                           </div>

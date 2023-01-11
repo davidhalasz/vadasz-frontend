@@ -6,6 +6,7 @@ const initialState = {
   products: [],
   filters: {
     categories: [],
+    subCategories: [],
     featured: false,
     showImage: false,
   },
@@ -20,7 +21,9 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(process.env.REACT_APP_BACKEND_URL + "/products");
+      const response = await axios.get(
+        process.env.REACT_APP_BACKEND_URL + "/products"
+      );
       return response.data;
     } catch (error) {
       const message = error.response.data.msg;
@@ -46,6 +49,30 @@ const productSlice = createSlice({
           payload.value,
         ];
       }
+
+      //remove subcats of removed category
+      if (payload.value === "Fegyverek") {
+        let filteredSubCat = state.filters.subCategories.filter(
+          (data) =>
+            data !== "Golyós puska" && 
+            data !== "Sörétes puska" &&
+            data !== "Vegyescsövű puska" &&
+            data !== "Maroklőfegyver" &&
+            data !== "Egyéb fegyverek"
+        );
+        state.filters.subCategories = [...filteredSubCat];
+      }
+
+      if (payload.value === "Optikák") {
+        let filteredSubCat = state.filters.subCategories.filter(
+          (data) =>
+            data !== "Távcsövek" &&
+            data !== "Éjjellátó távcső" &&
+            data !== "Hőkamerák" &&
+            data !== "Vadkamera"
+        );
+        state.filters.subCategories = [...filteredSubCat];
+      }
     },
     changeFeaturedFilter(state, action) {
       state.filters.featured = action.payload.value;
@@ -54,8 +81,8 @@ const productSlice = createSlice({
       state.filters.showImage = action.payload.value;
     },
     filteringProducts(state) {
-      let featuredProducts = state.products.filter(p => p.featured === true);
-      let baseProducts = state.products.filter(p => p.featured === false);
+      let featuredProducts = state.products.filter((p) => p.featured === true);
+      let baseProducts = state.products.filter((p) => p.featured === false);
       let allProducts = [...featuredProducts, ...baseProducts];
       let acc = [];
 
@@ -71,11 +98,9 @@ const productSlice = createSlice({
       acc = [];
 
       if (state.filters.showImage) {
-        acc = allProducts.filter((product) => {
-          if (product.images && product.images.split(", ").length > 0) {
-            return product;
-          }
-        });
+        acc = allProducts.filter(
+          (product) => product.images && product.images.split(", ").length > 0
+        );
       } else {
         acc = allProducts.filter((product) => product);
       }
@@ -99,6 +124,10 @@ const productSlice = createSlice({
 
       if (state.filters.categories.length > 0) {
         filtering("category", "categories");
+      }
+
+      if (state.filters.subCategories.length > 0) {
+        filtering("subCategory", "subCategories");
       }
     },
     resetFilter(state) {

@@ -3,6 +3,7 @@ import FilterSidebar from "../components/FilterSidebar";
 import ImageViewer from "../components/ImageViewer";
 import { ImageViewerContext } from "../context/ImageViewerContext";
 import { useViewer } from "../shared/hooks/viewer-hook";
+import '../shared/scroll.css';
 
 const Products = () => {
   const {
@@ -28,9 +29,9 @@ const Products = () => {
         prevImage: prevImage,
       }}
     >
-      <div className="grid grid-cols-6 h-screen w-full">
+      <div className="grid grid-cols-12 h-full w-full">
         <FilterSidebar />
-        <div className="h-full w-full col-span-5 bg-white">
+        <div className="h-full w-full col-span-9 bg-white scrollhost_container">
           <Outlet />
         </div>
         {display && <ImageViewer />}
