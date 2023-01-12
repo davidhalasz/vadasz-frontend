@@ -6,6 +6,8 @@ import FeaturedFilter from "./filters/FeaturedFilter";
 import ImageFilter from "./filters/ImageFilter";
 import SubCategoryFilter from "./filters/SubCategoryFilter";
 import "../shared/scroll.css";
+import PriceFilter from "./filters/PriceFilter";
+import CountyFilter from "./filters/CountyFilter";
 
 const FilterSidebar = () => {
   const navigate = useNavigate();
@@ -26,6 +28,11 @@ const FilterSidebar = () => {
     dispatch(productActions.changeShowImageFilter({name: name, value: value}));
     dispatch(productActions.filteringProducts({name: name, value: value}));
   }
+
+  const saveBetweenHandler = ({ name, min, max }) => {
+    dispatch(productActions.addBetweenData({ name: name, min: min, max: max }));
+    dispatch(productActions.filteringProducts({ name: name }));
+  };
 
   const navigateByLocation = () => {
     if(location.pathname === "/hirdetesek") {
@@ -56,14 +63,17 @@ const FilterSidebar = () => {
           <span className="pl-2">{ location.pathname === "/hirdetesek" ? 'Vissza a főoldalra' : 'Vissza a hirdetésekhez'}</span>
         </button>
         {location.pathname === "/hirdetesek" && (
-          <div className="grow scrollhost_container">
+          <div className="relative grow scrollhost_container">
             <p className="text-customBlue text-center mb-4">
               Szűrési feltételek
             </p>
+            <PriceFilter onBetweenFilter={saveBetweenHandler}/>
             <CategoryFilter onSaveFilter={saveFilterHandler} />
             <SubCategoryFilter onSaveFilter={saveFilterHandler}/>
+            <CountyFilter onSaveFilter={saveFilterHandler} />
             <FeaturedFilter onFeaturedFilter={saveFeaturedFilterHandler}/>
             <ImageFilter onShowImageFilter={saveImageFilterHandler} />
+
           </div>
         )}
       </div>

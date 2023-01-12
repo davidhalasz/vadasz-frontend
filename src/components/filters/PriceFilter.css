@@ -1,0 +1,15 @@
+.slider-div {
+  padding-left: 10px;
+  margin-right: 10px;
+}
+
+.MuiSlider-rail {
+  color: #000 !important;
+}
+
+.MuiSlider-thumb {
+  color: #264653 !important;
+}
+.MuiSlider-track {
+  color: #264653 !important;
+}
