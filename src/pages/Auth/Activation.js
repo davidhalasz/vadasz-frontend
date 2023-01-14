@@ -3,32 +3,34 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Activation = () => {
-    const [activated, setActivated] = useState(false);
-    const { uuid } = useParams();  
-    const navigate = useNavigate();
+  const [activated, setActivated] = useState(false);
+  const { uuid } = useParams();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log('hu')
-        const activationHandler = async () => {
-            setActivated(false);
-            try {
-                const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/activation/${uuid}`);
-                if(response.statusText === 'OK') {
-                    setActivated(true);
-                    const timeout = setTimeout(() => {
-                        navigate('/bejelentkezes');
-                    }, 5000);
+  useEffect(() => {
+    const activationHandler = async () => {
+      setActivated(false);
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/user/activation/${uuid}`
+        );
+        setActivated(true);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    activationHandler();
+  }, [uuid]);
 
-                    return () => clearTimeout(timeout);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
+  useEffect(() => {
+    if (activated) {
+      const timeout = setTimeout(() => {
+        navigate("/bejelentkezes");
+      }, 5000);
 
-        activationHandler();
-    }, [activated, navigate, uuid]);
-
+      return () => clearTimeout(timeout);
+    }
+  }, [navigate, activated]);
 
   return (
     <Fragment>
@@ -39,7 +41,7 @@ const Activation = () => {
           <div className="w-full text-center">
             <h1 className="pb-4 text-2xl font-bold text-customBlue">
               {activated
-                ? "Sikeres regisztráció! Néhány másodperc mulva visszairányítunk a bejelentkező felületre!"
+                ? "Sikeres regisztráció! Néhány másodperc múlva visszairányítunk a bejelentkező felületre!"
                 : "Regisztráció megerősítése folyamatban..."}
             </h1>
           </div>

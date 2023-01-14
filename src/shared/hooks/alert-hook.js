@@ -22,8 +22,8 @@ export const useAlert = () => {
       `${process.env.REACT_APP_BACKEND_URL}/product/${currentProduct}`
     );
     setChangedData(true);
-    toggleAlertDisplay();
-  }, [currentProduct, changedData]);
+    setDisplayAlert(!displayAlert);
+  }, [currentProduct, displayAlert]);
 
   const changedDataHandler = useCallback(() => {
     setChangedData(!changedData);

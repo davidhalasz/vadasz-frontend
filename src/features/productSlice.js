@@ -194,12 +194,13 @@ const productSlice = createSlice({
       state.filters.minmax.max = max;
 
       // get all counties
-      action.payload.map((prod) => {
+      action.payload.forEach(prod => {
         let place = JSON.parse(prod.place);
         if (!state.counties.includes(place.megye)) {
           state.counties.push(place.megye);
         }
       });
+
     });
     builder.addCase(fetchProducts.rejected, (state, action) => {
       state.isLoading = false;

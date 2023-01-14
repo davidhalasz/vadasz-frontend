@@ -56,7 +56,7 @@ const Register = () => {
   const registerSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:4000/api/user/regisztracio", {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/regisztracio`, {
         name: formState.inputs.name.value,
         email: formState.inputs.email.value,
         password: formState.inputs.password.value,
@@ -70,6 +70,17 @@ const Register = () => {
       }
     }
   };
+
+  const resendEmailHandler = async () => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/user/resend-email`, {
+          email: formState.inputs.email.value,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+  }
 
   return (
     <div>
@@ -188,11 +199,15 @@ const Register = () => {
               ref={nodeRef}
               className="absolute m-auto place-self-center bg-white shadow-md rounded-full px-8 pt-6 pb-8 mb-4 content-fit"
             >
-              <div className="w-full text-center">
+              <div className="w-full text-center flex flex-col">
                 <h1 className="text-lg font-bold text-customBlue">
                   A regisztrációval kapcsolatos további teendőket a megadott
                   email címre továbbítottuk.
                 </h1>
+                <div className="w-full flex place-content-end mt-2 gap-2">
+                  <p className="place-end">Nem kaptad meg az emailt?</p>
+                  <button type="button" onClick={() => resendEmailHandler()} className="text-customGreen font-bold">Újraküldés</button>
+                </div>
               </div>
             </div>
           </CSSTransition>
