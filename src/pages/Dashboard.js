@@ -14,7 +14,7 @@ import './Home.css';
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isError } = useSelector((state) => state.auth);
+  const { user, isError } = useSelector((state) => state.auth);
   const {
     display,
     currentImg,
@@ -26,12 +26,14 @@ const Dashboard = () => {
   } = useViewer();
 
   const {
+    alertText,
     toggleAlertDisplay,
     okSubmit,
     displayAlert,
     changedData,
     changedDataHandler,
     changeCurrentProductId,
+    changeCurrentUserId,
   } = useAlert();
 
   useEffect(() => {
@@ -42,7 +44,11 @@ const Dashboard = () => {
     if (isError) {
       navigate("/");
     }
-  }, [isError, navigate]);
+
+    if(user) {
+      console.log(user);
+    }
+  }, [user, isError, navigate]);
 
   return (
     <ImageViewerContext.Provider
@@ -58,16 +64,18 @@ const Dashboard = () => {
     >
       <AlertContext.Provider
         value={{
+          alertText: alertText,
           displayAlert: displayAlert,
           toggleAlertDisplay: toggleAlertDisplay,
           okSubmit: okSubmit,
           changedData: changedData,
           changedDataHandler: changedDataHandler,
           changeCurrentProductId: changeCurrentProductId,
+          changeCurrentUserId: changeCurrentUserId,
         }}
       >
         <div className="grid grid-cols-6 h-screen w-full">
-          <Sidebar />
+          <Sidebar user={user}/>
           <div className="h-full w-full col-span-5 bg-white scrollhost_container">
             <Outlet />
           </div>

@@ -63,7 +63,7 @@ function App() {
         { path: "feltoltott-hirdetesek", element: <ProductList /> },
         { path: "uj-hirdetes", element: <AddProduct /> },
         { path: "hirdetes-szerkesztese/:uuid", element: <EditProduct /> },
-        { path: "adataim", element: <UserProfile /> },
+        { path: "adataim/:uuid", element: <UserProfile /> },
         { path: "hirdetes/:uuid", element: <ShowProduct /> },
       ],
     },

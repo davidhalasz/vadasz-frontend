@@ -1,8 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const navigate = useNavigate();
-
   return (
     <div className="h-full w-full bg-customYellow p-3 text-customBlue font-bold flex flex-col justify-between">
       <div className="min-w-full">
@@ -33,11 +32,13 @@ const Sidebar = () => {
             Új hirdetés
           </button>
         </NavLink>
-        <NavLink to={"/kezelofelulet/adataim"}>
+        {props.user && 
+        <NavLink to={`/kezelofelulet/adataim/${props.user.uuid}`}>
           <button className="w-full p-3 backdrop-opacity-10 bg-black/10 rounded-md text-center my-2">
             Profil adatok
           </button>
         </NavLink>
+        }
       </div>
       <button className="flex mb-4 min-w-full" onClick={() => navigate("/")}>
         <svg

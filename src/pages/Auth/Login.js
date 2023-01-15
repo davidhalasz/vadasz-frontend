@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginUser, reset } from "../../features/authSlice";
+import { loginUser, reset, resetError } from "../../features/authSlice";
 import Input from "../../shared/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
 import { getCurrentUser } from "../../features/authSlice";
-
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
+import axios from "axios";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ const Login = () => {
   const { user, isError, isSuccess, isLoading, message } = useSelector(
     (state) => state.auth
   );
+  const [forgotPassword, setForgotPassword] = useState(false);
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -30,6 +31,17 @@ const Login = () => {
     },
     false
   );
+
+
+  useEffect(() => {
+    if(isError) {
+      const timer = setTimeout(() => {
+        dispatch(resetError());
+      }, 8000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isError, dispatch]);
 
   useEffect(() => {
     dispatch(getCurrentUser());
@@ -49,8 +61,17 @@ const Login = () => {
     dispatch(loginUser({ email, password }));
   };
 
+  const forgotPasswordHandler = async () => {
+    const email = formState.inputs.email.value;
+    try {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/uj-jelszo`, {email: email});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div>
+    <Fragment>
       <div className="relative grid grid-cols-2 h-screen w-full">
         <div className="h-full w-full bg-customYellow">
           <button
@@ -75,67 +96,112 @@ const Login = () => {
           </button>
         </div>
         <div className="h-full w-full bg-customMint"></div>
+        {!forgotPassword ? (
+          <div className="absolute z-10 m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 content-fit">
+            <div className="w-full text-center">
+              {isError && <p>{message}</p>}
+              <h1 className="pb-4 text-2xl font-bold text-customBlue">
+                Bejelentkezés
+              </h1>
+            </div>
 
-        <div className="absolute z-10 m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 content-fit">
-          <div className="w-full text-center">
-            {isError && <p>{message}</p>}
-            <h1 className="pb-4 text-2xl font-bold text-customBlue">
-              Bejelentkezés
-            </h1>
+            <form onSubmit={loginSubmitHandler}>
+              <div className="mb-4">
+                <Input
+                  id="email"
+                  type="text"
+                  label="Email"
+                  placeholder="Email"
+                  element="input"
+                  validators={[VALIDATOR_EMAIL()]}
+                  errorText="Add meg az email címed!"
+                  onInput={inputHandler}
+                />
+              </div>
+              <div className="mb-6">
+                <Input
+                  type="password"
+                  id="password"
+                  label="Jelszó"
+                  placeholder="Jelszó"
+                  element="input"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="Add meg a jelszavad!"
+                  onInput={inputHandler}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="submit"
+                >
+                  {isLoading ? "Küldés..." : "Bejelentkezés"}
+                </button>
+                <button
+                  className="ml-2 inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
+                  type="button"
+                  onClick={() => setForgotPassword(true)}
+                >
+                  Elfelejtetted a jelszavad?
+                </button>
+              </div>
+              <div className="pt-6">
+                <button
+                  type="button"
+                  className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
+                  onClick={() => navigate("/regisztracio")}
+                >
+                  Nincs még felhasználói fiókod? Regisztrálj!
+                </button>
+              </div>
+            </form>
           </div>
+        ) : (
+          <div className="absolute z-10 m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
+            <div className="w-full text-center">
+              {isError && <p>{message}</p>}
+              <h1 className="pb-4 text-2xl font-bold text-customBlue">
+                Új jelszó kérése
+              </h1>
+            </div>
 
-          <form onSubmit={loginSubmitHandler}>
-            <div className="mb-4">
-              <Input
-                id="email"
-                type="text"
-                label="Email"
-                placeholder="Email"
-                element="input"
-                validators={[VALIDATOR_EMAIL()]}
-                errorText="Add meg az email címed!"
-                onInput={inputHandler}
-              />
-            </div>
-            <div className="mb-6">
-              <Input
-                type="password"
-                id="password"
-                label="Jelszó"
-                placeholder="Jelszó"
-                element="input"
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText="Add meg a jelszavad!"
-                onInput={inputHandler}
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                {isLoading ? "Küldés..." : "Bejelentkezés"}
-              </button>
-              <a
-                className="ml-2 inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
-                href="http://localhost:3000/"
-              >
-                Elfelejtetted a jelszavad?
-              </a>
-            </div>
-            <div className="pt-6">
-              <button
-                type="button"
-                className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
-                onClick={() => navigate("/regisztracio")}
-              >
-                Nincs még felhasználói fiókod? Regisztrálj!
-              </button>
-            </div>
-          </form>
-        </div>
+            <form onSubmit={loginSubmitHandler}>
+              <div className="mb-4">
+                <Input
+                  id="email"
+                  type="text"
+                  label="Email"
+                  placeholder="Email"
+                  element="input"
+                  validators={[VALIDATOR_EMAIL()]}
+                  errorText="Add meg az email címed!"
+                  onInput={inputHandler}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <button
+                  className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="button"
+                  onClick={() => forgotPasswordHandler()}
+                >
+                  {isLoading ? "Küldés..." : "Bejelentkezés"}
+                </button>
+              </div>
+              <div className="pt-6">
+                <button
+                  type="button"
+                  className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
+                  onClick={() => setForgotPassword(false)}
+                >
+                  Vissza a bejelentkezésre
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
       </div>
-    </div>
+    </Fragment>
   );
 };
 

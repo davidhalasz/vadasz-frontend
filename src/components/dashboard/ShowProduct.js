@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ImageViewerContext } from "../../context/ImageViewerContext";
+import "../../shared/scroll.css";
 
 const ShowProduct = () => {
   const { toggleDisplay, selectImage } = useContext(ImageViewerContext);
@@ -22,6 +23,8 @@ const ShowProduct = () => {
 
     getProduct();
   }, [uuid]);
+
+  console.log(product);
 
   let images = [];
   if (product.images) {
@@ -63,7 +66,7 @@ const ShowProduct = () => {
   };
 
   return (
-    <div className="h-screen relative pt-4 pl-8">
+    <div className="h-screen relative pt-4 pl-8 scrollhost_containe">
       <h1 className="font-bold text-customBlue text-2xl py-8">
         {product.title}
       </h1>
@@ -93,26 +96,42 @@ const ShowProduct = () => {
                 <tbody>
                   <tr>
                     <td className="py-2 border-b border-slate-200">Ár</td>
-                    <td className="py-2 border-b border-slate-200">{product.price && product.price.toLocaleString()} Ft</td>
+                    <td className="py-2 border-b border-slate-200">
+                      {product.price && product.price.toLocaleString()} Ft
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-2 border-b border-slate-200">Helye</td>
-                    <td className="py-2 border-b border-slate-200">{getPlace(product.place)}</td>
+                    <td className="py-2 border-b border-slate-200">
+                      {getPlace(product.place)}
+                    </td>
                   </tr>
                   <tr>
-                    <td className="py-2 border-b border-slate-200">Kategória</td>
-                    <td className="py-2 border-b border-slate-200">{product.category}</td>
+                    <td className="py-2 border-b border-slate-200">
+                      Kategória
+                    </td>
+                    <td className="py-2 border-b border-slate-200">
+                      {product.category}
+                    </td>
                   </tr>
                   {product.subCategory && (
                     <tr>
-                      <td className="py-2 border-b border-slate-200">Alkategória</td>
-                      <td className="py-2 border-b border-slate-200">{product.subCategory}</td>
+                      <td className="py-2 border-b border-slate-200">
+                        Alkategória
+                      </td>
+                      <td className="py-2 border-b border-slate-200">
+                        {product.subCategory}
+                      </td>
                     </tr>
                   )}
                   {product.category !== "Vadászkutyák" && (
                     <tr>
-                      <td className="py-2 border-b border-slate-200">Állapot</td>
-                      <td className="py-2 border-b border-slate-200">{product.condition}</td>
+                      <td className="py-2 border-b border-slate-200">
+                        Állapot
+                      </td>
+                      <td className="py-2 border-b border-slate-200">
+                        {product.condition}
+                      </td>
                     </tr>
                   )}
                   {product.madeYear && (
@@ -136,10 +155,36 @@ const ShowProduct = () => {
           <h2 className="p-3 bg-customGreen w-full text-white text-lg font-bold rounded-l-md">
             Kapcsolat
           </h2>
-          <div className="mb-4 p-3 flex flex-col gap-2 text-lg">
-            <p>Email: emailœemail.com</p>
-            <p>Telefon: +36303692738</p>
-          </div>
+          {product.user && (
+            <div className="mb-4 p-3 flex flex-col gap-2 text-lg">
+              <table class="table-auto">
+                <tbody>
+                  <tr>
+                    <td className="py-2 border-b border-slate-200">Név</td>
+                    <td className="py-2 border-b border-slate-200">
+                      {product.user.name}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 border-b border-slate-200">email</td>
+                    <td className="py-2 border-b border-slate-200">
+                      {product.user.email}
+                    </td>
+                  </tr>
+                  {product.user.telephone && (
+                    <tr>
+                      <td className="py-2 border-b border-slate-200">
+                        Telefon
+                      </td>
+                      <td className="py-2 border-b border-slate-200">
+                        {product.user.telephone}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

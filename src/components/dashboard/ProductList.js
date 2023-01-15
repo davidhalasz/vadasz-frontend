@@ -46,7 +46,7 @@ const ProductList = () => {
 
   const alertHandler = (id) => {
     changeCurrentProductId(id);
-    toggleAlertDisplay();
+    toggleAlertDisplay("Biztosan törölni szeretnéd a hirdetést?", 'product');
   };
 
   const getCity = (jsonStr) => {

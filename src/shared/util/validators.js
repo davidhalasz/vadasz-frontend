@@ -28,7 +28,7 @@ export const validate = (value, validators) => {
   let isValid = true;
   for (const validator of validators) {
     if (validator.type === VALIDATOR_TYPE_REQUIRE) {
-      isValid = isValid && value.trim().length > 0;
+      isValid = isValid && value.trim().length > 3;
     }
     if (validator.type === VALIDATOR_TYPE_MINLENGTH) {
       isValid = isValid && value.trim().length >= validator.val;
@@ -46,7 +46,7 @@ export const validate = (value, validators) => {
       isValid = isValid && /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
     }
     if (validator.type === VALIDATOR_TYPE_TELEPHONE) {
-      isValid = (isValid && value.trim().length > 10) || (isValid && value.trim().length === 0);
+      isValid = (isValid && value.trim().length === 10) || (isValid && value.trim().length === 0);
     }
     if (validator.type === VALIDATOR_TYPE_YEAR) {
       isValid = (isValid && value.trim().length === 4) || (isValid && value.trim().length === 0);

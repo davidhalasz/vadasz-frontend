@@ -10,9 +10,14 @@ import {
 } from "../../shared/util/validators";
 import jsoncities from "../../shared/cities";
 
-const CAT_FEGYVEREK = ["Golyós puska", "Sörétes puska","Vegyescsövű puska", "Maroklőfegyver", "Egyéb fegyverek"];
+const CAT_FEGYVEREK = [
+  "Golyós puska",
+  "Sörétes puska",
+  "Vegyescsövű puska",
+  "Maroklőfegyver",
+  "Egyéb fegyverek",
+];
 const CAT_OPTIKAK = ["Távcsövek", "Éjjellátó távcső", "Hőkamerák", "Vadkamera"];
-
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -22,24 +27,27 @@ const AddProduct = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [featured, setFeatured] = useState(false);
-  const [formState, inputHandler] = useForm({
-    title: {
-      value: "",
-      isValid: false,
+  const [formState, inputHandler] = useForm(
+    {
+      title: {
+        value: "",
+        isValid: false,
+      },
+      price: {
+        value: "",
+        isValid: false,
+      },
+      desc: {
+        value: "",
+        isValid: false,
+      },
+      madeYear: {
+        value: "",
+        isValid: false,
+      },
     },
-    price: {
-      value: "",
-      isValid: false,
-    },
-    desc: {
-      value: "",
-      isValid: false,
-    },
-    madeYear: {
-      value: "",
-      isValid: false,
-    },
-  }, false);
+    false
+  );
 
   const initSelectValue = {
     selectCity: {
@@ -152,15 +160,15 @@ const AddProduct = () => {
     const price = parseInt(priceStr.replaceAll(/\s/g, ""));
     const madeYear = formState.inputs.madeYear.value;
     const city = jsoncities[parseInt(selectForm.selectCity.value)];
-    let subCategory = '';
+    let subCategory = "";
     let category = selectForm.selectCategory.value;
 
-    if(CAT_FEGYVEREK.includes(category)) {
+    if (CAT_FEGYVEREK.includes(category)) {
       subCategory = category;
       category = "Vadászfegyverek";
     }
 
-    if(CAT_OPTIKAK.includes(category)) {
+    if (CAT_OPTIKAK.includes(category)) {
       subCategory = category;
       category = "Optikák";
     }
