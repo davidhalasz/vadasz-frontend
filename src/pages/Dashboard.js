@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../components/dashboard/Sidebar";
@@ -9,12 +9,19 @@ import ImageViewer from "../components/ImageViewer";
 import { useAlert } from "../shared/hooks/alert-hook";
 import { AlertContext } from "../context/AlertContext";
 import AlertView from "../shared/AlertView";
-import './Home.css';
+import "./Home.css";
+import { productActions } from "../features/productSlice";
+import { CSSTransition } from "react-transition-group";
+import "./productSnackbar.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const nodeRef = useRef(null);
   const { user, isError } = useSelector((state) => state.auth);
+  const { isErrorProduct, isSuccessProduct, productMessage } = useSelector(
+    (state) => state.products
+  );
   const {
     display,
     currentImg,
@@ -45,10 +52,20 @@ const Dashboard = () => {
       navigate("/");
     }
 
-    if(user) {
+    if (user) {
       console.log(user);
     }
   }, [user, isError, navigate]);
+
+  useEffect(() => {
+    if (isErrorProduct || isSuccessProduct) {
+      const timer = setTimeout(() => {
+        dispatch(productActions.removeMessageHandler());
+      }, 6000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isErrorProduct, isSuccessProduct, dispatch]);
 
   return (
     <ImageViewerContext.Provider
@@ -75,9 +92,56 @@ const Dashboard = () => {
         }}
       >
         <div className="grid grid-cols-6 h-screen w-full">
-          <Sidebar user={user}/>
-          <div className="h-full w-full col-span-5 bg-white scrollhost_container">
+          <Sidebar user={user} />
+          <div className="relative h-full w-full col-span-5 bg-white scrollhost_container">
             <Outlet />
+            <CSSTransition
+              in={isSuccessProduct || isErrorProduct}
+              nodeRef={nodeRef}
+              timeout={300}
+              classNames="snackbar"
+            >
+              <div
+                ref={nodeRef}
+                className={`absolute flex gap-3 top-4 right-0 p-2  text-white font-bold rounded-md mr-4 
+                ${isErrorProduct && "bg-customRed"} 
+                ${isSuccessProduct && "bg-customGreen"}`}
+              >
+                {isSuccessProduct && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                )}
+                {isErrorProduct && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                    />
+                  </svg>
+                )}
+                <p>{productMessage}</p>
+              </div>
+            </CSSTransition>
           </div>
           {display && <ImageViewer />}
           {displayAlert && <AlertView />}

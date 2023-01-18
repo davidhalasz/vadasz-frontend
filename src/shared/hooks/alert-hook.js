@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { productActions } from "../../features/productSlice";
 
 export const useAlert = () => {
+  const dispatch = useDispatch();
   const [displayAlert, setDisplayAlert] = useState(false);
   const [changedData, setChangedData] = useState(false);
   const [currentProduct, setCurrentProduct] = useState("");
@@ -29,9 +32,10 @@ export const useAlert = () => {
   const okSubmit = useCallback(async () => {
     try {
       if (type === "product") {
-        await axios.delete(
+        const response = await axios.delete(
           `${process.env.REACT_APP_BACKEND_URL}/product/${currentProduct}`
         );
+        dispatch(productActions.addMessageHandler({messageType: "success", message: response.data.msg}));
         setChangedData(true);
       }
 
@@ -42,6 +46,9 @@ export const useAlert = () => {
         setChangedData(true);
       }
     } catch (error) {
+      if (error.response) {
+        dispatch(productActions.addMessageHandler({messageType: "error", message: error.response.data.msg}));
+      }
       setChangedData(false);
     }
     setDisplayAlert(!displayAlert);

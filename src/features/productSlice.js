@@ -21,10 +21,11 @@ const initialState = {
     counties: [],
   },
   filteredProducts: [],
-  isError: false,
+  isErrorProduct: false,
+  isSuccessProduct: false,
   isSuccess: false,
   isLoading: false,
-  message: "",
+  productMessage: "",
 };
 
 export const fetchProducts = createAsyncThunk(
@@ -46,6 +47,17 @@ const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
+    addMessageHandler(state, action) {
+      const payload = action.payload;
+      state.isErrorProduct = payload.messageType === "error" ? true : false;
+      state.isSuccessProduct = payload.messageType === "success" ? true : false;
+      state.productMessage = payload.message;
+    },
+    removeMessageHandler(state, action) {
+      state.isErrorProduct = false;
+      state.isSuccessProduct = false;
+      state.productMessage = "";
+    },
     addFilter(state, action) {
       const payload = action.payload;
       if (state.filters[payload.name].includes(payload.value)) {

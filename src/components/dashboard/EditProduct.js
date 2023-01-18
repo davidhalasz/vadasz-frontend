@@ -9,6 +9,8 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 import jsoncities from "../../shared/cities";
+import { useDispatch } from "react-redux";
+import { productActions } from "../../features/productSlice";
 
 const activeImg = "grayscale object-cover object-center w-full h-full";
 const deactivateImg = "object-cover object-center w-full h-full";
@@ -26,6 +28,7 @@ const CAT_FEGYVEREK = [
 const CAT_OPTIKAK = ["Távcsövek", "Éjjellátó távcső", "Hőkamerák", "Vadkamera"];
 
 const EditProduct = (props) => {
+  const dispatch = useDispatch();
   let location = useLocation();
   const prod = location.state.product;
   let prodImages = [];
@@ -157,8 +160,6 @@ const EditProduct = (props) => {
 
   useEffect(() => {
     const checkValidation = () => {
-      console.log(formState.inputs);
-      console.log(selectForm);
       if (
         (selectForm.selectCategory.value === "Vadászkutyák" &&
           formState.inputs.title.isValid &&
@@ -220,13 +221,14 @@ const EditProduct = (props) => {
     formData.append("deletedImages", deletedImages.join(", "));
 
     try {
-      await axios.patch(
+      const response = await axios.patch(
         `${process.env.REACT_APP_BACKEND_URL}/product/${prod.uuid}`,
         formData
       );
+      dispatch(productActions.addMessageHandler({messageType: "success", message: response.data.msg}));
       navigate("/kezelofelulet/feltoltott-hirdetesek");
     } catch (error) {
-      console.log(error);
+      dispatch(productActions.addMessageHandler({messageType: "error", message: error.response.data.msg}));
     }
   };
 

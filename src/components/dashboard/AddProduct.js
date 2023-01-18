@@ -10,6 +10,8 @@ import {
   VALIDATOR_YEAR,
 } from "../../shared/util/validators";
 import jsoncities from "../../shared/cities";
+import { useDispatch } from "react-redux";
+import { productActions } from "../../features/productSlice";
 
 const CAT_FEGYVEREK = [
   "Golyós puska",
@@ -22,6 +24,7 @@ const CAT_OPTIKAK = ["Távcsövek", "Éjjellátó távcső", "Hőkamerák", "Vad
 
 const AddProduct = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const fileReader = new FileReader();
   const [isValidForms, setIsValidForm] = useState(false);
   const [images, setImages] = useState([]);
@@ -194,14 +197,15 @@ const AddProduct = () => {
     formData.append("madeYear", madeYear);
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/product`,
         formData
       );
+      dispatch(productActions.addMessageHandler({messageType: "success", message: response.data.msg}));
       navigate("/kezelofelulet/feltoltott-hirdetesek");
     } catch (error) {
       if (error.response) {
-        console.log(error.response.data.msg);
+        dispatch(productActions.addMessageHandler({messageType: "error", message: error.response.data.msg}));
       }
     }
   };
