@@ -60,6 +60,10 @@ const EditProduct = (props) => {
         value: prod.desc,
         isValid: true,
       },
+      madeYear: {
+        value: prod.madeYear,
+        isValid: true,
+      },
     },
     true
   );
@@ -165,11 +169,13 @@ const EditProduct = (props) => {
           formState.inputs.title.isValid &&
           formState.inputs.desc.isValid &&
           formState.inputs.price.isValid &&
+          formState.inputs.madeYear.isValid &&
           selectForm.selectCategory.isValid &&
           selectForm.selectCity.isValid) ||
         (formState.inputs.title.isValid &&
           formState.inputs.desc.isValid &&
           formState.inputs.price.isValid &&
+          formState.inputs.madeYear.isValid &&
           selectForm.selectCategory.isValid &&
           selectForm.selectCity.isValid &&
           selectForm.selectCondition.isValid)
@@ -235,7 +241,7 @@ const EditProduct = (props) => {
   return (
     <Fragment>
       <div className="w-full text-center p-4 text-customBlue font-bold text-2xl">
-        <h1 className="text-customBlue">Új hirdetés hozzáadása</h1>
+        <h1 className="text-customBlue">Termék szerkesztése</h1>
       </div>
       <div className="mx-auto w-10/12">
         <form onSubmit={submitFormHandler}>
@@ -331,7 +337,7 @@ const EditProduct = (props) => {
                   validators={[VALIDATOR_YEAR()]}
                   onInput={inputHandler}
                   errorText="Nem valid évszám! 0 vagy 4 jegyú számjegynek kell lennie."
-                  value={prod.madeYear}
+                  value={formState.inputs.madeYear.value}
                 />
               </div>
             </div>

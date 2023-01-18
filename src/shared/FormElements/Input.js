@@ -1,3 +1,4 @@
+import produce from "immer";
 import { useEffect, useReducer } from "react";
 
 import { validate } from "../util/validators";
@@ -58,6 +59,12 @@ const Input = (props) => {
         type: "TOUCH",
       });
     }
+
+    if(props.id === "madeYear" && inputState.value.trim().length > 0) {
+      dispatch({
+        type: "TOUCH",
+      });
+    }
   };
 
   const element =
@@ -70,7 +77,7 @@ const Input = (props) => {
         type={props.type}
         placeholder={props.placeholder}
         onChange={changeHandler}
-        onBlur={() => touchHandler(props.id)}
+        onBlur={() => touchHandler()}
         value={inputState.value}
       />
     ) : (
