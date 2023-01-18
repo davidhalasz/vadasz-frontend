@@ -1,0 +1,8 @@
+.modal {
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transition: bottom 0.5s ease-in;
+    z-index: 1;
+  }
+  

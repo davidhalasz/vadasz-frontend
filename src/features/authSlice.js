@@ -6,7 +6,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: "",
+  message: '',
 };
 
 export const loginUser = createAsyncThunk(
@@ -77,6 +77,8 @@ export const authSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isSuccess = true;
+      state.isError = false;
+      state.message = '';
       state.user = action.payload.user;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
@@ -92,13 +94,14 @@ export const authSlice = createSlice({
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isSuccess = true;
+      state.isError = false;
+      state.message = '';
       state.user = action.payload.user;
     });
     builder.addCase(getCurrentUser.rejected, (state, action) => {
       state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload;
-      
+      state.isError = false;
+      state.message = '';
     });
   },
 });

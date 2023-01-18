@@ -6,6 +6,7 @@ import { useForm } from "../../shared/hooks/form-hook";
 import { getCurrentUser, reset } from "../../features/authSlice";
 import { CSSTransition } from "react-transition-group";
 import "./Register.css";
+import "./alert.css";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_EMAIL,
@@ -17,6 +18,7 @@ const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [msg, setMsg] = useState("");
+  const [isError, setIsError] = useState(false);
   const [isSentEmail, setIsSentEmail] = useState(false);
   const { user, isSuccess } = useSelector((state) => state.auth);
   const nodeRef = useRef(null);
@@ -53,6 +55,18 @@ const Register = () => {
     dispatch(reset());
   }, [user, isSuccess, dispatch, navigate]);
 
+  useEffect(() => {
+    if (isError) {
+      const timer = setTimeout(() => {
+        setIsError(false);
+        setMsg('');
+      }, 8000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isError, msg]);
+
+
   const registerSubmitHandler = async (event) => {
     event.preventDefault();
     try {
@@ -64,9 +78,9 @@ const Register = () => {
       });
       setIsSentEmail(true);
     } catch (error) {
-      console.log(error);
       if (error.response) {
-        setMsg(error.data.msg);
+        setIsError(true);
+        setMsg(error.response.data.msg);
       }
     }
   };
@@ -109,9 +123,13 @@ const Register = () => {
         </div>
         <div className="h-full w-full bg-customMint"></div>
         {!isSentEmail ? (
-          <div className="absolute m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 content-fit">
+          <div className="absolute m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
             <div className="w-full text-center">
-              {msg && <p>{msg}</p>}
+            <CSSTransition in={isError} timeout={300} nodeRef={nodeRef} classNames="alert">
+                <div ref={nodeRef} className={`${msg !== '' && "p-2 bg-customRed text-white font-bold rounded-md my-2"} `}>
+                  <p>{msg}</p>
+                </div>
+              </CSSTransition>
               <h1 className="pb-4 text-2xl font-bold text-customBlue">
                 Regisztráció
               </h1>

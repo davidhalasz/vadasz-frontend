@@ -5,6 +5,7 @@ import ImageUpload from "../../shared/FormElements/ImageUpload";
 import Input from "../../shared/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
 import {
+  VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
   VALIDATOR_YEAR,
 } from "../../shared/util/validators";
@@ -136,12 +137,14 @@ const AddProduct = () => {
   useEffect(() => {
     const checkValidation = () => {
       if (
-        formState.inputs.title.isValid &&
-        formState.inputs.desc.isValid &&
-        formState.inputs.price.isValid &&
-        selectForm.selectCategory.isValid &&
-        selectForm.selectCity.isValid &&
-        selectForm.selectCondition.isValid
+        (selectForm.selectCategory.value === "Vadászkutyák" &&
+          formState.isValid &&
+          selectForm.selectCategory.isValid &&
+          selectForm.selectCity.isValid) ||
+        (formState.isValid &&
+          selectForm.selectCategory.isValid &&
+          selectForm.selectCity.isValid &&
+          selectForm.selectCondition.isValid)
       ) {
         setIsValidForm(true);
       } else {
@@ -286,51 +289,61 @@ const AddProduct = () => {
                 <Input
                   id="madeYear"
                   type="number"
-                  label="Gyártási év"
-                  placeholder="Gyártási év"
+                  label={`${
+                    selectForm.selectCategory.value === "Vadászkutyák"
+                      ? "Születés éve"
+                      : "Gyártási év"
+                  }`}
+                  placeholder={`${
+                    selectForm.selectCategory.value === "Vadászkutyák"
+                      ? "Születés éve"
+                      : "Gyártási év"
+                  }`}
                   element="input"
                   validators={[VALIDATOR_YEAR()]}
                   onInput={inputHandler}
-                  errorText="Nem valid évszám! 0 vagy 4 jegyú számjegynek kell lennie."
+                  errorText="Nem valid évszám! 0 vagy 4 jegyű számjegyből kell állni!"
                 />
               </div>
             </div>
-            <div className="w-full md:w-1/2 lg:w-1/4 px-4">
-              <div className="mb-8">
-                <div className="form-control">
-                  <label
-                    className="block text-customBlue text-sm font-bold mb-2"
-                    htmlFor="selectCondition"
-                  >
-                    Állapot
-                  </label>
-                  <select
-                    onChange={handleChangeSelectedValue}
-                    defaultValue={selectForm.selectCondition.value}
-                    className={`shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      !selectForm.selectCondition.isValid &&
-                      selectForm.selectCondition.isTouched &&
-                      "border-red-500"
-                    }`}
-                    name="selectCondition"
-                    id="selectCondition"
-                    onBlur={handleSelectError}
-                  >
-                    <option disabled value="">
-                      Válassz állapotot
-                    </option>
-                    <option value="új">Új</option>
-                    <option value="használt">Használt</option>
-                  </select>
-                  {!selectForm.selectCondition.isValid &&
-                    selectForm.selectCondition.isTouched && (
-                      <p className="text-red-500">
-                        {selectForm.selectCondition.errorMsg}
-                      </p>
-                    )}
+            {selectForm.selectCategory.value !== "Vadászkutyák" && (
+              <div className="w-full md:w-1/2 lg:w-1/4 px-4">
+                <div className="mb-8">
+                  <div className="form-control">
+                    <label
+                      className="block text-customBlue text-sm font-bold mb-2"
+                      htmlFor="selectCondition"
+                    >
+                      Állapot
+                    </label>
+                    <select
+                      onChange={handleChangeSelectedValue}
+                      defaultValue={selectForm.selectCondition.value}
+                      className={`shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                        !selectForm.selectCondition.isValid &&
+                        selectForm.selectCondition.isTouched &&
+                        "border-red-500"
+                      }`}
+                      name="selectCondition"
+                      id="selectCondition"
+                      onBlur={handleSelectError}
+                    >
+                      <option disabled value="">
+                        Válassz állapotot
+                      </option>
+                      <option value="új">Új</option>
+                      <option value="használt">Használt</option>
+                    </select>
+                    {!selectForm.selectCondition.isValid &&
+                      selectForm.selectCondition.isTouched && (
+                        <p className="text-red-500">
+                          {selectForm.selectCondition.errorMsg}
+                        </p>
+                      )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             <div className="w-full md:w-1/2 lg:w-1/4 px-4">
               <div className="mb-8">
                 <div className="form-control">
@@ -377,11 +390,11 @@ const AddProduct = () => {
                 <Input
                   id="title"
                   type="text"
-                  label="Cím"
-                  placeholder="Cím"
+                  label="Termék neve"
+                  placeholder="Termék neve"
                   element="input"
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText="Cím megadása kötelező"
+                  validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5)]}
+                  errorText="A termék nevének megadása kötelező és legalább 5 karakterből kell állnia!"
                   onInput={inputHandler}
                 />
               </div>
@@ -395,8 +408,8 @@ const AddProduct = () => {
                   label="Leírás"
                   placeholder="Leírás"
                   element="textaera"
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText="Leírás megadása kötelező"
+                  validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5)]}
+                  errorText="Leírás megadása kötelező és legalább 5 karakterből kell állnia!"
                   onInput={inputHandler}
                 />
               </div>

@@ -75,8 +75,8 @@ const EditProduct = (props) => {
     },
     selectCondition: {
       value: prod.condition,
-      isTouched: true,
-      isValid: true,
+      isTouched: prod.category === "Vadászkutyák" ? false : true,
+      isValid: prod.category === "Vadászkutyák" ? false : true,
       errorMsg: "Állapot kiválasztása kötelező!",
     },
     selectCategory: {
@@ -157,13 +157,21 @@ const EditProduct = (props) => {
 
   useEffect(() => {
     const checkValidation = () => {
+      console.log(formState.inputs);
+      console.log(selectForm);
       if (
-        formState.inputs.title.isValid &&
-        formState.inputs.desc.isValid &&
-        formState.inputs.price.isValid &&
-        selectForm.selectCategory.isValid &&
-        selectForm.selectCity.isValid &&
-        selectForm.selectCondition.isValid
+        (selectForm.selectCategory.value === "Vadászkutyák" &&
+          formState.inputs.title.isValid &&
+          formState.inputs.desc.isValid &&
+          formState.inputs.price.isValid &&
+          selectForm.selectCategory.isValid &&
+          selectForm.selectCity.isValid) ||
+        (formState.inputs.title.isValid &&
+          formState.inputs.desc.isValid &&
+          formState.inputs.price.isValid &&
+          selectForm.selectCategory.isValid &&
+          selectForm.selectCity.isValid &&
+          selectForm.selectCondition.isValid)
       ) {
         setIsValidForm(true);
       } else {
@@ -307,8 +315,16 @@ const EditProduct = (props) => {
                 <Input
                   id="madeYear"
                   type="number"
-                  label="Gyártási év"
-                  placeholder="Gyártási év"
+                  label={`${
+                    selectForm.selectCategory.value === "Vadászkutyák"
+                      ? "Születés éve"
+                      : "Gyártási év"
+                  }`}
+                  placeholder={`${
+                    selectForm.selectCategory.value === "Vadászkutyák"
+                      ? "Születés éve"
+                      : "Gyártási év"
+                  }`}
                   element="input"
                   validators={[VALIDATOR_YEAR()]}
                   onInput={inputHandler}
@@ -317,43 +333,45 @@ const EditProduct = (props) => {
                 />
               </div>
             </div>
-            <div className="w-full md:w-1/2 lg:w-1/4 px-4">
-              <div className="mb-8">
-                <div className="form-control">
-                  <label
-                    className="block text-customBlue text-sm font-bold mb-2"
-                    htmlFor="selectCondition"
-                  >
-                    Állapot
-                  </label>
-                  <select
-                    onChange={handleChangeSelectedValue}
-                    defaultValue={selectForm.selectCondition.value}
-                    className={`shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                      !selectForm.selectCondition.isValid &&
-                      selectForm.selectCondition.isTouched &&
-                      "border-red-500"
-                    }`}
-                    name="selectCondition"
-                    id="selectCondition"
-                    onBlur={handleSelectError}
-                    value={props.condition}
-                  >
-                    <option disabled value="">
-                      Válassz állapotot
-                    </option>
-                    <option value="új">Új</option>
-                    <option value="használt">Használt</option>
-                  </select>
-                  {!selectForm.selectCondition.isValid &&
-                    selectForm.selectCondition.isTouched && (
-                      <p className="text-red-500">
-                        {selectForm.selectCondition.errorMsg}
-                      </p>
-                    )}
+            {selectForm.selectCategory.value !== "Vadászkutyák" && (
+              <div className="w-full md:w-1/2 lg:w-1/4 px-4">
+                <div className="mb-8">
+                  <div className="form-control">
+                    <label
+                      className="block text-customBlue text-sm font-bold mb-2"
+                      htmlFor="selectCondition"
+                    >
+                      Állapot
+                    </label>
+                    <select
+                      onChange={handleChangeSelectedValue}
+                      defaultValue={selectForm.selectCondition.value}
+                      className={`shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                        !selectForm.selectCondition.isValid &&
+                        selectForm.selectCondition.isTouched &&
+                        "border-red-500"
+                      }`}
+                      name="selectCondition"
+                      id="selectCondition"
+                      onBlur={handleSelectError}
+                      value={props.condition}
+                    >
+                      <option disabled value="">
+                        Válassz állapotot
+                      </option>
+                      <option value="új">Új</option>
+                      <option value="használt">Használt</option>
+                    </select>
+                    {!selectForm.selectCondition.isValid &&
+                      selectForm.selectCondition.isTouched && (
+                        <p className="text-red-500">
+                          {selectForm.selectCondition.errorMsg}
+                        </p>
+                      )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             <div className="w-full md:w-1/2 lg:w-1/4 px-4">
               <div className="mb-8">
                 <div className="form-control">
