@@ -1,6 +1,7 @@
 .scrollhost_container::-webkit-scrollbar {
     position: absolute;
     width: 10px;
+    z-index: 5;
 }
 
 .scrollhost_container::-webkit-scrollbar-track {

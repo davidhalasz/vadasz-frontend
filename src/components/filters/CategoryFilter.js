@@ -1,31 +1,13 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { productActions } from "../../features/productSlice";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
 import FilterButton from "../../shared/FormElements/FilterButton";
 
 const CategoryFilter = (props) => {
-  let location = useLocation();
-  const dispatch = useDispatch();
-  const categoryName = location.state ? location.state.category : "";
-  const resetFilter = location.state ? location.state.reset : false;
   let filters = useSelector((state) => state.products.filters.categories);
   const addCategoryFilterHandler = (event) => {
     props.onSaveFilter({ name: "categories", value: event.target.value });
   };
 
-  useEffect(() => {
-    if (categoryName) {
-      dispatch(productActions.resetFilter());
-      props.onSaveFilter({ name: "categories", value: categoryName });
-    }
-  }, [dispatch, props, categoryName]);
-
-  useEffect(() => {
-    if(resetFilter) {
-      dispatch(productActions.resetFilter());
-    }
-  }, [dispatch, resetFilter]);
 
   return (
     <Fragment>

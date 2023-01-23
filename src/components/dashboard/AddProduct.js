@@ -47,7 +47,7 @@ const AddProduct = () => {
       },
       madeYear: {
         value: "",
-        isValid: false,
+        isValid: true,
       },
     },
     false
@@ -307,6 +307,7 @@ const AddProduct = () => {
                   validators={[VALIDATOR_YEAR()]}
                   onInput={inputHandler}
                   errorText="Nem valid évszám! 0 vagy 4 jegyű számjegyből kell állni!"
+                  valid={formState.inputs.madeYear.isValid}
                 />
               </div>
             </div>

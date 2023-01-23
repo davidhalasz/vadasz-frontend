@@ -123,9 +123,9 @@ const UserProfile = () => {
     <Fragment>
       <div className="w-full flex flex-col text-center p-4 text-customBlue">
         <h1 className="text-2xl font-bold">Profiladatok</h1>
-        <div className="w-full grid grid-cols-3 gap-3">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
           {user && (
-            <div className="shadow-lg p-8 mt-8">
+            <div className="w-full shadow-lg p-8 mt-8">
               <h2 className="text-lg font-bold mb-8">Alapadatok</h2>
               <table className="table-auto text-lg">
                 <tbody>

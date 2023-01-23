@@ -3,16 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, reset } from "../features/authSlice";
 import { getCurrentUser } from "../features/authSlice";
-import { fetchProducts } from "../features/productSlice";
+import { fetchProducts, productActions } from "../features/productSlice";
 import ListItem from "../components/ListItem";
 import "./Home.css";
 import Footer from "../components/Footer";
+import useWindowDimensions from "../shared/hooks/screenSizes-hook";
+import BaseFooter from "../components/BaseFooter";
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const products = useSelector((state) => state.products.products);
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -32,9 +35,17 @@ const Home = () => {
     dispatch(getCurrentUser());
   }, [dispatch]);
 
-  const linkBtn = (pathName, state, title, cardColor) => {
+  const setCategoryFilter = (value) => {
+    dispatch(productActions.resetFilter());
+    dispatch(productActions.addFilter({ name: "categories", value: value }));
+  };
+
+  const linkBtn = (pathName, category, title, cardColor) => {
     return (
-      <Link to={{ pathname: pathName }} state={state}>
+      <Link
+        to={{ pathname: pathName }}
+        onClick={() => setCategoryFilter(category)}
+      >
         <div
           className={`w-full text-xl text-white font-bold p-6 rounded-l-md bg-${cardColor}`}
         >
@@ -46,9 +57,55 @@ const Home = () => {
     );
   };
 
+  const getFeaturedProducts = () => {
+    let isThereFeatured = products.find((prod) => {
+      if (prod.featured === true) {
+        return true;
+      }
+      return false;
+    });
+
+    if (isThereFeatured) {
+      return products.map(
+        (product) =>
+          product.featured && (
+            <ListItem
+              product={product}
+              key={product.uuid}
+              cardColor={"customBlue"}
+            />
+          )
+      );
+    } else {
+      return (
+        <p className="text-center font-bold text-lg">
+          Jelenleg nincs kiemelt termék
+        </p>
+      );
+    }
+  };
+
+  const getLatestProducts = () => {
+    if (typeof products !== "undefined" && products.length > 0) {
+      return products.map((product) => (
+        <ListItem
+          product={product}
+          key={product.uuid}
+          cardColor={"customPurple"}
+        />
+      ));
+    } else {
+      return (
+        <p className="text-center font-bold text-lg">
+          Jelenleg nincs kiemelt termék
+        </p>
+      );
+    }
+  };
+
   return (
-    <div className="h-full">
-      <div className="grid grid-cols-2 h-screen w-full">
+    <div className="flex flex-col">
+      <div className="flex flex-col md:grid md:grid-cols-2 md:h-screen w-full">
         <div className="relative h-full w-full bg-customYellow flex">
           <div className="absolute w-full">
             <div className="px-8 pt-2 flex justify-between">
@@ -83,51 +140,22 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="px-8 font-extrabold self-center flex flex-col gap-3">
-            <span className="bg-clip-text text-6xl text-transparent bg-customBlue">
+          <div className="py-16 md:py-0 text-center w-full md:text-left md:w-fit px-8 font-extrabold self-center flex flex-col gap-3">
+            <span className="bg-clip-text text-4xl md:text-5xl lg:text-6xl text-transparent bg-customBlue">
               Vadászbörze
             </span>
 
-            <span className="bg-clip-text text-3xl text-transparent bg-customBlue">
+            <span className="bg-clip-text text-xl md:text-2xl lg:text-3xl text-transparent bg-customBlue">
               Lorem ipsum dolor et crtrra.
             </span>
           </div>
         </div>
         <div className="h-full w-full bg-customBlue flex items-stretch">
-          <div className="w-full pl-14 py-8 flex flex-col self-center gap-1">
-            {linkBtn(
-              "/hirdetesek",
-              { category: "Vadászfegyverek" },
-              "Vadászfegyverek",
-              "customOrange"
-            )}
-            {linkBtn(
-              "/hirdetesek",
-              { category: "Lőszerek" },
-              "Lőszerek",
-              "customMint"
-            )}
-            {linkBtn(
-              "/hirdetesek",
-              { category: "Optikák" },
-              "Optikák",
-              "customYellow"
-            )}
-            {linkBtn(
-              "/hirdetesek",
-              { category: "Ruházat" },
-              "Ruházat",
-              "customRed"
-            )}
-            {linkBtn(
-              "/hirdetesek",
-              { category: "Vadászkutyák" },
-              "Vadászkutyák",
-              "customGreen"
-            )}
+          <div className="w-full pl-14 py-4 md:py-0 flex flex-col self-center gap-1">
+            {linkBtn("/hirdetesek", "Ingatlanok", "Ingatlanok", "customIce")}
             <Link
               to={{ pathname: "/hirdetesek" }}
-              state={{ category: "Járművek" }}
+              onClick={() => setCategoryFilter("Járművek")}
             >
               <div
                 className={`w-full text-xl text-white font-bold p-6 rounded-md bg-customPurple`}
@@ -137,48 +165,48 @@ const Home = () => {
                 </span>
               </div>
             </Link>
+            {linkBtn("/hirdetesek", "Kellékek", "Kellékek", "customRed")}
+            {linkBtn("/hirdetesek", "Lőszerek", "Lőszerek", "customMint")}
+            {linkBtn("/hirdetesek", "Optikák", "Optikák", "customYellow")}
+            {linkBtn("/hirdetesek", "Ruházat", "Ruházat", "customRed")}
             {linkBtn(
               "/hirdetesek",
-              { category: "Ingatlanok" },
-              "Ingatlanok",
-              "customIce"
+              "Vadászfegyverek",
+              "Vadászfegyverek",
+              "customOrange"
             )}
             {linkBtn(
               "/hirdetesek",
-              { category: "Kellékek" },
-              "Kellékek",
-              "customRed"
+              "Vadászkutyák",
+              "Vadászkutyák",
+              "customGreen"
             )}
           </div>
         </div>
       </div>
-      <div className="relative max-h-screen w-full overflow-hidden">
-        <div className="grid grid-cols-2 h-screen w-full">
+
+      <div className="md:relative w-full md:overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2  max-h-screen md:h-screen w-full">
           <div className="w-full max-h-screen bg-white justify-between">
             <div className="h-full flex flex-col">
-              <div className="grow-0 h-fit p-8 font-extrabold">
+              <div className="grow-0 p-8 font-extrabold flex-none">
                 <span className="bg-clip-text text-3xl text-transparent bg-customBlue">
                   Kiemelt hirdetések
                 </span>
               </div>
               <div className="grow h-fit scrollhost_container">
                 <div className="flex flex-col mx-3 gap-1">
-                  {products.map(
-                    (product) =>
-                      product.featured && (
-                        <ListItem
-                          product={product}
-                          key={product.uuid}
-                          cardColor={"customBlue"}
-                        />
-                      )
-                  )}
+                  {getFeaturedProducts()}
                 </div>
               </div>
               <div className="grow-0 h-fit w-full pr-14 py-3">
                 <Link
                   to={{ pathname: "/hirdetesek" }}
-                  state={{ featured: true }}
+                  onClick={() =>
+                    dispatch(
+                      productActions.changeFeaturedFilter({ value: true })
+                    )
+                  }
                 >
                   <div className="w-full text-xl text-white font-bold p-3 rounded-r-md bg-customOrange flex justify-end">
                     <span className="backdrop-opacity-10 bg-black/10 p-2 rounded-md ">
@@ -199,18 +227,15 @@ const Home = () => {
               </div>
               <div className="grow scrollhost_container flex-1">
                 <div className="flex flex-col mx-3 h-fit">
-                  {products.map((product) => (
-                    <ListItem
-                      product={product}
-                      key={product.uuid}
-                      cardColor={"customPurple"}
-                    />
-                  ))}
+                  {getLatestProducts()}
                 </div>
               </div>
 
               <div className="grow-0 w-full pl-14 py-3 flex-none">
-                <Link to={{ pathname: "/hirdetesek" }} state={{ reset: true }}>
+                <Link
+                  to={{ pathname: "/hirdetesek" }}
+                  onClick={() => dispatch(productActions.resetFilter())}
+                >
                   <div className="w-full text-xl text-white font-bold p-3 rounded-l-md bg-customGreen flex justify-start">
                     <span className="backdrop-opacity-10 bg-black/10 p-2 rounded-md ">
                       Összes mutatása
@@ -221,7 +246,39 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <Footer />
+        {width > 767 && <Footer />}
+      </div>
+      
+      <div className="md:hidden w-full bg-customBlue text-white py-8">
+        <div className="container mx-auto grid grid-cols-3">
+          <div>
+            <h2 className="text-center text-lg font-bold">Kapcsolat</h2>
+            <ul>
+              <li>lorem</li>
+              <li>ipsum</li>
+              <li>dolot</li>
+              <li>etevgg</li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-center text-lg font-bold">Valami</h2>
+            <ul>
+              <li>lorem</li>
+              <li>ipsum</li>
+              <li>dolot</li>
+              <li>etevgg</li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-center text-lg font-bold">Lorem ipsum</h2>
+            <ul>
+              <li>lorem</li>
+              <li>ipsum</li>
+              <li>dolot</li>
+              <li>etevgg</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

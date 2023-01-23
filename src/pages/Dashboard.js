@@ -91,9 +91,9 @@ const Dashboard = () => {
           changeCurrentUserId: changeCurrentUserId,
         }}
       >
-        <div className="grid grid-cols-6 h-screen w-full">
+        <div className="flex flex-col md:grid md:grid-cols-12 h-screen w-full">
           <Sidebar user={user} />
-          <div className="relative h-full w-full col-span-5 bg-white scrollhost_container">
+          <div className="relative h-full w-full col-span-9 bg-white scrollhost_container">
             <Outlet />
             <CSSTransition
               in={isSuccessProduct || isErrorProduct}

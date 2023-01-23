@@ -51,7 +51,7 @@ const ShowProduct = () => {
         <img
           onClick={() => openImageViewer(img)}
           key={index}
-          className="w-full aspect-square object-cover"
+          className="w-full aspect-square object-cover h-20 w-20 md:h-auto md:w-auto"
           src={`${process.env.REACT_APP_ASSET_URL}/${img}`}
           alt="thumbnails"
         />
@@ -66,17 +66,17 @@ const ShowProduct = () => {
   };
 
   return (
-    <div className="h-screen relative pt-4 pl-8 scrollhost_containe">
-      <h1 className="font-bold text-customBlue text-2xl py-8">
+    <div className="h-full relative pt-4 pb-14 pl-1 md:pl-8">
+      <h1 className="font-bold text-customBlue text-xl md:text-2xl py-8 px-3">
         {product.title}
       </h1>
-      <div className="flex gap-3">
-        <div className="w-3/12">
-          <div className="w-full">
+      <div className="flex flex-col md:flex-row">
+        <div className="w-full md:w-3/12 mx-auto">
+          <div className="w-7/12 md:w-full mx-auto">
             <img
               onClick={() => openImageViewer(images[0])}
               alt="avat"
-              className="w-full aspect-square object-cover"
+              className="w-full aspect-square object-cover pb-1"
               src={
                 images[0]
                   ? `${process.env.REACT_APP_ASSET_URL}/${images[0]}`
@@ -84,9 +84,9 @@ const ShowProduct = () => {
               }
             />
           </div>
-          <div className="grid grid-cols-3 gap-1">{getArrayOfImages()}</div>
+          <div className="flex flex-row md:grid md:grid-cols-3 gap-1 overflow-x-auto mx-auto w-fit">{getArrayOfImages()}</div>
         </div>
-        <div className="w-9/12 pl-8">
+        <div className="w-full md:w-9/12 pl-8 pt-4 md:pt-0">
           <h2 className="p-3 bg-customRed w-full text-white text-lg font-bold rounded-l-md">
             Információk
           </h2>

@@ -18,7 +18,7 @@ const ListItem = (props) => {
   const getCity = (jsonStr) => {
     const json = JSON.parse(jsonStr);
     return json.nev;
-  }
+  };
 
   return (
     <div
@@ -30,7 +30,7 @@ const ListItem = (props) => {
         state={{ product: props.product }}
       >
         <div className="w-full rounded-md flex flex-row gap-3">
-          <div className="h-20 w-20 shrink-0 my-1 backdrop-opacity-10 bg-black/10 ml-1 rounded-md">
+          <div className="h-20 w-20 shrink-0 my-1 ml-1 rounded-md">
             {getImage(props.product.images) ?? (
               <img
                 alt="avat"
@@ -41,15 +41,15 @@ const ListItem = (props) => {
           </div>
           <div className="w-full flex flex-col text-white">
             <div className="w-full flex justify-between pb-2">
-              <h3 className="font-bold backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
+              <h3 className="font-bold py-1 px-2 rounded-md">
                 {props.product.title}
               </h3>
               <div className="flex gap-1">
-                <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md whitespace-nowrap">
+                <p className="py-1 px-2 rounded-md whitespace-nowrap">
                   {props.product.price.toLocaleString()} Ft
                 </p>
-                <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
-                {getCity(props.product.place)}
+                <p className="py-1 px-2 rounded-md">
+                  {getCity(props.product.place)}
                 </p>
               </div>
             </div>

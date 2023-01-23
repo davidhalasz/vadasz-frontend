@@ -166,16 +166,11 @@ const EditProduct = (props) => {
     const checkValidation = () => {
       if (
         (selectForm.selectCategory.value === "Vadászkutyák" &&
-          formState.inputs.title.isValid &&
-          formState.inputs.desc.isValid &&
-          formState.inputs.price.isValid &&
-          formState.inputs.madeYear.isValid &&
+          formState.isValid &&
           selectForm.selectCategory.isValid &&
           selectForm.selectCity.isValid) ||
         (formState.inputs.title.isValid &&
-          formState.inputs.desc.isValid &&
-          formState.inputs.price.isValid &&
-          formState.inputs.madeYear.isValid &&
+          formState.isValid &&
           selectForm.selectCategory.isValid &&
           selectForm.selectCity.isValid &&
           selectForm.selectCondition.isValid)
@@ -338,6 +333,7 @@ const EditProduct = (props) => {
                   onInput={inputHandler}
                   errorText="Nem valid évszám! 0 vagy 4 jegyú számjegynek kell lennie."
                   value={formState.inputs.madeYear.value}
+                  valid={formState.inputs.madeYear.isValid}
                 />
               </div>
             </div>
@@ -480,7 +476,7 @@ const EditProduct = (props) => {
                   savedImages.map((el, index) => (
                     <div
                       key={index}
-                      className="border border-mint w-24 h-24 shrink-0"
+                      className="border border-mint w-24 h-24 mb-6"
                     >
                       <img
                         className={
@@ -503,7 +499,7 @@ const EditProduct = (props) => {
                 {previewUrls.map((el, index) => (
                   <div
                     key={index}
-                    className="border border-mint w-24 h-24 shrink-0"
+                    className="border border-mint w-24 h-24 mb-6"
                   >
                     <img
                       className={newImages[index] ? activeImg : deactivateImg}

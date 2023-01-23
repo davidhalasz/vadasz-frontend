@@ -29,7 +29,7 @@ const ImageViewer = (props) => {
       <div
         ref={nodeRef}
         dismissible
-        className=" absolute max-h-screen top-0 left-0 bottom-0 right-0 bg-black/90 backdrop-blur-md flex place-center"
+        className="fixed h-screen top-0 left-0 bottom-0 right-0 bg-black/90 backdrop-blur-md flex place-center"
       >
         <button
           className="absolute text-white z-10 top-10 right-10"
@@ -53,7 +53,7 @@ const ImageViewer = (props) => {
         </button>
         <div className="relative w-full h-full pt-8 text-white">
           <div className="mx-auto w-full h-5/6 flex justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center w-1/12">
               {images.findIndex((x) => x === currentImg) > 0 ? (
                 <svg
                   onClick={prevImage}
@@ -70,18 +70,20 @@ const ImageViewer = (props) => {
                     d="M15.75 19.5L8.25 12l7.5-7.5"
                   />
                 </svg>
-              ) : <div className="w-10"></div>}
+              ) : (
+                <div className="w-10"></div>
+              )}
+            </div>
+            <div className="w-10/12 max-h-full flex items-center">
+              <img
+                className="pb-2 m-auto px-2 max-h-full"
+                src={`${process.env.REACT_APP_ASSET_URL}/${currentImg}`}
+                alt="current"
+              />
             </div>
 
-            <img
-              className="h-full pb-2"
-              src={`${process.env.REACT_APP_ASSET_URL}/${currentImg}`}
-              alt="current"
-            />
-
-            <div className="flex items-center">
-              {images.findIndex((x) => x === currentImg) <
-                images.length - 1 ? (
+            <div className="flex items-center w-1/12">
+              {images.findIndex((x) => x === currentImg) < images.length - 1 ? (
                 <svg
                   onClick={nextImage}
                   xmlns="http://www.w3.org/2000/svg"
@@ -97,10 +99,12 @@ const ImageViewer = (props) => {
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
-              ) : <div className="w-10"></div>}
+              ) : (
+                <div className="w-10"></div>
+              )}
             </div>
           </div>
-          <div className="h-1/6 flex flex-row gap-1 p-1 w-fit mx-auto">
+          <div className="h-1/6 flex flex-row gap-1 p-1 w-fit mx-auto overflow-x-auto">
             {images.map((img, index) => (
               <img
                 key={index}

@@ -47,12 +47,12 @@ const MainProductList = () => {
 
   return (
     <Fragment>
-      <div className="text-customBlue h-screen flex flex-col">
+      <div className="text-customBlue h-full flex flex-col">
         <h1 className="grow-0 font-bold text-2xl text-center p-4 flex-none">
           Hirdetések
         </h1>
 
-        <div className="grow mx-auto w-10/12 flex-1 pr-2">
+        <div className="grow mx-auto w-11/12 md:w-10/12 flex-1">
           <div className="w-full ">
             <TransitionGroup className="product-list">
               {filteredProducts.map((product, index) => (
@@ -70,7 +70,7 @@ const MainProductList = () => {
                       state={{ product: product }}
                     >
                       <div className="w-full rounded-md flex flex-row gap-3">
-                        <div className="h-20 w-20 shrink-0 my-1 backdrop-opacity-10 bg-black/10 ml-1 rounded-md">
+                        <div className="h-20 w-20 shrink-0 my-1  ml-1 rounded-md">
                           {getImage(product.images) ?? (
                             <img
                               alt="avat"
@@ -81,14 +81,14 @@ const MainProductList = () => {
                         </div>
                         <div className="w-full flex flex-col">
                           <div className="w-full flex justify-between pb-2">
-                            <h3 className="font-bold backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
+                            <h3 className="font-bold  py-1 px-2 rounded-md">
                               {product.title}
                             </h3>
                             <div className="flex gap-1">
-                              <p className={`backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md whitespace-nowrap  font-bold ${product.featured ? "text-customBlue" :"text-customGreen"}` }>
+                              <p className={` py-1 px-2 rounded-md whitespace-nowrap  font-bold ${product.featured ? "text-customBlue" :"text-customGreen"}` }>
                                 {product.price.toLocaleString()} Ft
                               </p>
-                              <p className="backdrop-opacity-10 bg-black/10 py-1 px-2 rounded-md">
+                              <p className=" py-1 px-2 rounded-md">
                                 {getCity(product.place)}
                               </p>
                             </div>
