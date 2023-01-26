@@ -193,7 +193,7 @@ const productSlice = createSlice({
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.products = action.payload;
+      state.products = action.payload.filter((product) => product.activated === true);
 
       // initialize minimum and maximum prices
       let min = Math.min(...action.payload.map((item) => item.price));

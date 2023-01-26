@@ -24,7 +24,6 @@ const ShowProduct = () => {
     getProduct();
   }, [uuid]);
 
-  console.log(product);
 
   let images = [];
   if (product.images) {

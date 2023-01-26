@@ -97,7 +97,7 @@ const Home = () => {
     } else {
       return (
         <p className="text-center font-bold text-lg">
-          Jelenleg nincs kiemelt termék
+          Jelenleg nincs feltöltött termék
         </p>
       );
     }
@@ -185,7 +185,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="md:relative w-full md:overflow-hidden">
+      <div className="relative w-full md:overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2  max-h-screen md:h-screen w-full">
           <div className="w-full max-h-screen bg-white justify-between">
             <div className="h-full flex flex-col">
@@ -245,41 +245,14 @@ const Home = () => {
               </div>
             </div>
           </div>
+          <div className="md:hidden">
+            <BaseFooter />
+          </div>
         </div>
         {width > 767 && <Footer />}
       </div>
       
-      <div className="md:hidden w-full bg-customBlue text-white py-8">
-        <div className="container mx-auto grid grid-cols-3">
-          <div>
-            <h2 className="text-center text-lg font-bold">Kapcsolat</h2>
-            <ul>
-              <li>lorem</li>
-              <li>ipsum</li>
-              <li>dolot</li>
-              <li>etevgg</li>
-            </ul>
-          </div>
-          <div>
-            <h2 className="text-center text-lg font-bold">Valami</h2>
-            <ul>
-              <li>lorem</li>
-              <li>ipsum</li>
-              <li>dolot</li>
-              <li>etevgg</li>
-            </ul>
-          </div>
-          <div>
-            <h2 className="text-center text-lg font-bold">Lorem ipsum</h2>
-            <ul>
-              <li>lorem</li>
-              <li>ipsum</li>
-              <li>dolot</li>
-              <li>etevgg</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 };
