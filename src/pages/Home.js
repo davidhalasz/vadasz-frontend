@@ -7,12 +7,13 @@ import { fetchProducts, productActions } from "../features/productSlice";
 import ListItem from "../components/ListItem";
 import "./Home.css";
 import BaseFooter from "../components/BaseFooter";
+import LoadingSpinner from "../shared/LoadingSpinner";
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const products = useSelector((state) => state.products.products);
+  const {products, isLoading } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -193,7 +194,7 @@ const Home = () => {
               </div>
               <div className="grow h-fit scrollhost_container">
                 <div className="flex flex-col mx-3 gap-1">
-                  {getFeaturedProducts()}
+                  {isLoading ? <LoadingSpinner/> : getFeaturedProducts()}
                 </div>
               </div>
               <div className="grow-0 h-fit w-full pr-14 py-3">
@@ -223,7 +224,7 @@ const Home = () => {
               </div>
               <div className="grow scrollhost_container flex-1">
                 <div className="flex flex-col mx-3 h-fit">
-                  {getLatestProducts()}
+                  {isLoading ? <LoadingSpinner/> : getLatestProducts()}
                 </div>
               </div>
 
