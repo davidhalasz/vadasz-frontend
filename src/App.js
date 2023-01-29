@@ -1,20 +1,23 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./App.css";
-import LoadingSpinner from "./shared/LoadingSpinner";
 
-//import Login from "./pages/Auth/Login";
-//import Dashboard from "./pages/Dashboard";
-//import Register from "./pages/Auth/Register";
-//import Home from "./pages/Home";
-//import ProductList from "./components/dashboard/ProductList";
-//import AddProduct from "./components/dashboard/AddProduct";
-//import UserProfile from "./components/dashboard/UserProfile";
-//import ShowProduct from "./components/dashboard/ShowProduct";
-//import EditProduct from "./components/dashboard/EditProduct";
-//import Products from "./pages/Products";
-//import MainProductList from "./components/MainProductList";
+import Login from "./pages/Auth/Login";
+import Dashboard from "./pages/Dashboard";
+import Register from "./pages/Auth/Register";
+import Activation from "./pages/Auth/Activation";
+import Home from "./pages/Home";
+import ProductList from "./components/dashboard/ProductList";
+import AddProduct from "./components/dashboard/AddProduct";
+import UserProfile from "./components/dashboard/UserProfile";
+import ShowProduct from "./components/dashboard/ShowProduct";
+import EditProduct from "./components/dashboard/EditProduct";
+import Products from "./pages/Products";
+import MainProductList from "./components/MainProductList";
+
+/*
+// if you need suspense
 
 const Login = React.lazy(() => import("./pages/Auth/Login"));
 const Activation = React.lazy(() => import("./pages/Auth/Activation"));
@@ -40,7 +43,7 @@ const Products = React.lazy(() => import("./pages/Products"));
 const MainProductList = React.lazy(() =>
   import("./components/MainProductList")
 );
-
+*/
 
 function App() {
   let routes = createBrowserRouter([
@@ -70,15 +73,7 @@ function App() {
   ]);
   return (
     <main>
-      <Suspense
-        fallback={
-          <div className="center">
-            <LoadingSpinner />
-          </div>
-        }
-      >
         <RouterProvider router={routes} />
-      </Suspense>
     </main>
   );
 }

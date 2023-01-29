@@ -38,7 +38,7 @@ const CategoryFilter = (props) => {
         <FilterButton
           value="Ruházat"
           title="ruházat"
-          activated={filters?.includes("Őltözékek")}
+          activated={filters?.includes("Ruházat")}
           onSaveData={addCategoryFilterHandler}
         />
         <FilterButton

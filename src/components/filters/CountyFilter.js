@@ -19,9 +19,10 @@ const CountyFilter = (props) => {
         </span>
       </div>
       <div>
-        {counties.map((item) => {
+        {counties.map((item, index) => {
           return (
             <FilterButton
+              key={index}
               value={item}
               title={item}
               activated={filters.includes(item)}

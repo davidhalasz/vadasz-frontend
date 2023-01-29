@@ -65,7 +65,7 @@ const ShowProduct = () => {
   };
 
   return (
-    <div className="h-full relative pt-4 pb-14 pl-1 md:pl-8">
+    <div className="h-full relative pt-0 pb-14 pl-1 md:pl-8 scrollhost_container">
       <h1 className="font-bold text-customBlue text-xl md:text-2xl py-8 px-3">
         {product.title}
       </h1>

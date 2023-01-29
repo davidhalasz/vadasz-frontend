@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchProducts, productActions } from "../features/productSlice";
@@ -10,6 +10,8 @@ const baseBg = "w-full bg-customBlue p-1 rounded-md my-2 text-white";
 
 const MainProductList = () => {
   const products = useSelector((state) => state.products.products);
+  const [isFetching, setIsFetching] = useState(false);
+  const [numberOfItemsShown, setNumberOfItemsShown] = useState(20);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,6 +47,25 @@ const MainProductList = () => {
     }
   };
 
+  function fetchMoreListItems() {
+    setTimeout(() => {
+      setIsFetching(false);
+      setNumberOfItemsShown(numberOfItemsShown + 20);
+    }, 2000);
+  }
+
+  const handleScroll = (e) => {
+    const bottom =
+      e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    if (filteredProducts.length > numberOfItemsShown) {
+      if (bottom) {
+        e.preventDefault();
+        setIsFetching(true);
+        fetchMoreListItems();
+      }
+    }
+  };
+
   return (
     <Fragment>
       <div className="text-customBlue h-full flex flex-col">
@@ -52,57 +73,70 @@ const MainProductList = () => {
           Hirdetések
         </h1>
 
-        <div className="grow mx-auto w-11/12 md:w-10/12 flex-1">
+        <div
+          className="grow mx-auto w-11/12 md:w-10/12 flex-1 scrollhost_container"
+          onScroll={handleScroll}
+        >
           <div className="w-full ">
             <TransitionGroup className="product-list">
-              {filteredProducts.map((product, index) => (
-                <CSSTransition
-                  key={product.uuid}
-                  timeout={500}
-                  classNames="item"
-                >
-                  <div
+              {filteredProducts
+                .slice(0, numberOfItemsShown)
+                .map((product, index) => (
+                  <CSSTransition
                     key={product.uuid}
-                    className={product.featured ? featuredBg : baseBg}
+                    timeout={500}
+                    classNames="item"
                   >
-                    <Link
-                      to={{ pathname: `/hirdetesek/${product.uuid}` }}
-                      state={{ product: product }}
+                    <div
+                      key={product.uuid}
+                      className={product.featured ? featuredBg : baseBg}
                     >
-                      <div className="w-full rounded-md flex flex-row gap-3">
-                        <div className="h-20 w-20 shrink-0 my-1  ml-1 rounded-md">
-                          {getImage(product.images) ?? (
-                            <img
-                              alt="avat"
-                              className="h-full w-full object-cover h-20 w-20"
-                              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Deer_%28example%29.svg/1024px-Deer_%28example%29.svg.png?20180723123450"
-                            />
-                          )}
-                        </div>
-                        <div className="w-full flex flex-col">
-                          <div className="w-full flex justify-between pb-2">
-                            <h3 className="font-bold  py-1 px-2 rounded-md">
-                              {product.title}
-                            </h3>
-                            <div className="flex gap-1">
-                              <p className={` py-1 px-2 rounded-md whitespace-nowrap  font-bold ${product.featured ? "text-customBlue" :"text-customGreen"}` }>
-                                {product.price.toLocaleString()} Ft
-                              </p>
-                              <p className=" py-1 px-2 rounded-md">
-                                {getCity(product.place)}
-                              </p>
-                            </div>
+                      <Link
+                        to={{ pathname: `/hirdetesek/${product.uuid}` }}
+                        state={{ product: product }}
+                      >
+                        <div className="w-full rounded-md flex flex-row gap-3">
+                          <div className="h-20 w-20 shrink-0 my-1  ml-1 rounded-md">
+                            {getImage(product.images) ?? (
+                              <img
+                                alt="avat"
+                                className="h-full w-full object-cover h-20 w-20"
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Deer_%28example%29.svg/1024px-Deer_%28example%29.svg.png?20180723123450"
+                              />
+                            )}
                           </div>
-                          <p className="line-clamp-2 overflow-hidden mb-2">
-                            {product.desc}
-                          </p>
+                          <div className="w-full flex flex-col">
+                            <div className="w-full flex justify-between pb-2">
+                              <h3 className="font-bold  py-1 px-2 rounded-md">
+                                {product.title}
+                              </h3>
+                              <div className="flex gap-1">
+                                <p
+                                  className={` py-1 px-2 rounded-md whitespace-nowrap  font-bold ${
+                                    product.featured
+                                      ? "text-customBlue"
+                                      : "text-customGreen"
+                                  }`}
+                                >
+                                  {product.price.toLocaleString()} Ft
+                                </p>
+                                <p className=" py-1 px-2 rounded-md">
+                                  {getCity(product.place)}
+                                </p>
+                              </div>
+                            </div>
+                            <p className="line-clamp-2 overflow-hidden mb-2">
+                              {product.desc}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  </div>
-                </CSSTransition>
-              ))}
+                      </Link>
+                    </div>
+                  </CSSTransition>
+                ))}
             </TransitionGroup>
+            {isFetching && <p className="py-4">További termékek beöltése...</p>}
+            {(filteredProducts.length < numberOfItemsShown) && <p className="py-4">Nincs több termék</p>}
           </div>
         </div>
       </div>

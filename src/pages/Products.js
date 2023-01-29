@@ -31,7 +31,7 @@ const Products = () => {
     >
       <div className="flex flex-col md:grid md:grid-cols-12 max-h-screen w-full">
         <FilterSidebar />
-        <div className="relative max-h-screen w-full col-span-9 bg-white scrollhost_container">
+        <div className="relative max-h-screen w-full col-span-9 bg-white">
           <Outlet />
         </div>
         {display && <ImageViewer />}

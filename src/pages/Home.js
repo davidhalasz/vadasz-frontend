@@ -6,8 +6,6 @@ import { getCurrentUser } from "../features/authSlice";
 import { fetchProducts, productActions } from "../features/productSlice";
 import ListItem from "../components/ListItem";
 import "./Home.css";
-import Footer from "../components/Footer";
-import useWindowDimensions from "../shared/hooks/screenSizes-hook";
 import BaseFooter from "../components/BaseFooter";
 
 const Home = () => {
@@ -15,7 +13,6 @@ const Home = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const products = useSelector((state) => state.products.products);
-  const { width } = useWindowDimensions();
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -66,7 +63,7 @@ const Home = () => {
     });
 
     if (isThereFeatured) {
-      return products.map(
+      return products.slice(0, 10).map(
         (product) =>
           product.featured && (
             <ListItem
@@ -87,7 +84,7 @@ const Home = () => {
 
   const getLatestProducts = () => {
     if (typeof products !== "undefined" && products.length > 0) {
-      return products.map((product) => (
+      return products.slice(0, 10).map((product) => (
         <ListItem
           product={product}
           key={product.uuid}
@@ -142,7 +139,7 @@ const Home = () => {
           </div>
           <div className="py-16 md:py-0 text-center w-full md:text-left md:w-fit px-8 font-extrabold self-center flex flex-col gap-3">
             <span className="bg-clip-text text-4xl md:text-5xl lg:text-6xl text-transparent bg-customBlue">
-              Vadászbörze
+              Vadászhirdető
             </span>
 
             <span className="bg-clip-text text-xl md:text-2xl lg:text-3xl text-transparent bg-customBlue">
@@ -217,7 +214,6 @@ const Home = () => {
               </div>{" "}
             </div>
           </div>
-
           <div className="w-full max-h-screen bg-customIce justify-between">
             <div className="h-full flex flex-col">
               <div className="grow-0 p-8 font-extrabold flex-none">
@@ -245,14 +241,9 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="md:hidden">
-            <BaseFooter />
-          </div>
         </div>
-        {width > 767 && <Footer />}
       </div>
-      
-      
+      <BaseFooter />
     </div>
   );
 };
