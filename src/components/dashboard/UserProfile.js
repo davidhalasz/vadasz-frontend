@@ -9,7 +9,7 @@ import {
   VALIDATOR_TELEPHONE,
 } from "../../shared/util/validators";
 import axios from "axios";
-import { getCurrentUser, reset } from "../../features/authSlice";
+import { addMessageHandler, getCurrentUser, reset } from "../../features/authSlice";
 import { AlertContext } from "../../context/AlertContext";
 import { useNavigate } from "react-router-dom";
 
@@ -57,16 +57,19 @@ const UserProfile = () => {
     const isValid = formState.inputs.telephone.isValid;
     if (isValid) {
       try {
-        await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/user/update-user/${user.uuid}`,
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/user/update-user/${user._id}`,
           {
             telephone: telephone,
           }
         );
+        
         setIsTelephoneInput(false);
         dispatch(getCurrentUser());
+        dispatch(addMessageHandler({messageType: "success", message: response.data.msg}));
       } catch (error) {
         console.log(error);
+        dispatch(addMessageHandler({messageType: "error", message: error.response.data.msg}));
       }
     }
   };
@@ -76,16 +79,18 @@ const UserProfile = () => {
     const isValid = formState.inputs.name.isValid;
     if (isValid) {
       try {
-        await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/user/update-user/${user.uuid}`,
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/user/update-user/${user._id}`,
           {
             name: name,
           }
         );
         setIsNameInput(false);
         dispatch(getCurrentUser());
+        dispatch(addMessageHandler({messageType: "success", message: response.data.msg}));
       } catch (error) {
         console.log(error);
+        dispatch(addMessageHandler({messageType: "error", message: error.response.data.msg}));
       }
     }
   };
@@ -99,23 +104,24 @@ const UserProfile = () => {
         const oldPassword = formState.inputs.oldPassword.value;
         const newPassword = formState.inputs.newPassword.value;
 
-        await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/user/update-user/${user.uuid}`,
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/user/update-user/${user._id}`,
           {
             newpassword: newPassword,
             oldpassword: oldPassword,
           }
         );
         dispatch(getCurrentUser());
-        window.location.reload(false);
+        dispatch(addMessageHandler({messageType: "success", message: response.data.msg}));
       } catch (error) {
         console.log(error);
+        dispatch(addMessageHandler({messageType: "error", message: error.response.data.msg}));
       }
     }
   };
 
   const alertHandler = () => {
-    changeCurrentUserId(user.uuid);
+    changeCurrentUserId(user._id);
     toggleAlertDisplay("Biztosan törölni szeretnéd a profilod?", "profile");
   };
 

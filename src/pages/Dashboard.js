@@ -11,6 +11,7 @@ import { AlertContext } from "../context/AlertContext";
 import AlertView from "../shared/AlertView";
 import "./Home.css";
 import { productActions } from "../features/productSlice";
+import { removeAuthMessageHandler } from "../features/authSlice";
 import { CSSTransition } from "react-transition-group";
 import "./productSnackbar.css";
 
@@ -18,10 +19,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
-  const { user, isError } = useSelector((state) => state.auth);
+  const { user, isSuccessAuth, isErrorAuth, authMessage, isLoading } =
+    useSelector((state) => state.auth);
   const { isErrorProduct, isSuccessProduct, productMessage } = useSelector(
     (state) => state.products
   );
+
   const {
     display,
     currentImg,
@@ -45,17 +48,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getCurrentUser());
+    
   }, [dispatch]);
 
   useEffect(() => {
-    if (isError) {
-      navigate("/");
+    if (!isLoading) {
+      if (!user) {
+        navigate("/");
+      }
     }
-
-    if (user) {
-      console.log(user);
-    }
-  }, [user, isError, navigate]);
+  }, [user, navigate, isLoading]);
 
   useEffect(() => {
     if (isErrorProduct || isSuccessProduct) {
@@ -66,6 +68,16 @@ const Dashboard = () => {
       return () => clearTimeout(timer);
     }
   }, [isErrorProduct, isSuccessProduct, dispatch]);
+
+  useEffect(() => {
+    if (isErrorAuth || isSuccessAuth) {
+      const timer = setTimeout(() => {
+        dispatch(removeAuthMessageHandler());
+      }, 6000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isErrorAuth, isSuccessAuth, dispatch]);
 
   return (
     <ImageViewerContext.Provider
@@ -96,7 +108,12 @@ const Dashboard = () => {
           <div className="relative h-full w-full col-span-9 bg-white scrollhost_container">
             <Outlet />
             <CSSTransition
-              in={isSuccessProduct || isErrorProduct}
+              in={
+                isSuccessProduct ||
+                isErrorProduct ||
+                isSuccessAuth ||
+                isErrorAuth
+              }
               nodeRef={nodeRef}
               timeout={300}
               classNames="snackbar"
@@ -104,10 +121,10 @@ const Dashboard = () => {
               <div
                 ref={nodeRef}
                 className={`absolute flex gap-3 top-4 right-0 p-2  text-white font-bold rounded-md mr-4 
-                ${isErrorProduct && "bg-customRed"} 
-                ${isSuccessProduct && "bg-customGreen"}`}
+                ${(isErrorProduct || isErrorAuth) && "bg-customRed"} 
+                ${(isSuccessProduct || isSuccessAuth) && "bg-customGreen"}`}
               >
-                {isSuccessProduct && (
+                {(isSuccessProduct || isSuccessAuth) && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -123,7 +140,7 @@ const Dashboard = () => {
                     />
                   </svg>
                 )}
-                {isErrorProduct && (
+                {(isErrorProduct || isErrorAuth) && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -139,7 +156,8 @@ const Dashboard = () => {
                     />
                   </svg>
                 )}
-                <p>{productMessage}</p>
+                {productMessage !== "" && <p>{productMessage}</p>}
+                {authMessage !== "" && <p>{authMessage}</p>}
               </div>
             </CSSTransition>
           </div>

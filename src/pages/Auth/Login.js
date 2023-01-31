@@ -17,7 +17,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const nodeRef = useRef(null);
-  const { user, isError, isSuccess, isLoading, message } = useSelector(
+  const { user, isError, isLoading, message } = useSelector(
     (state) => state.auth
   );
   const [forgotPassword, setForgotPassword] = useState(false);
@@ -47,14 +47,14 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(getCurrentUser());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (user) {
-      navigate("/kezelofelulet/feltoltott-hirdetesek", { replace: true });
+    if (!isLoading) {
+      if (user) {
+        navigate("/kezelofelulet/feltoltott-hirdetesek", { replace: true });
+      } else {
+        dispatch(reset());
+      }
     }
-    dispatch(reset());
-  }, [user, isSuccess, dispatch, navigate]);
+  }, [dispatch, user, isLoading, navigate]);
 
   const loginSubmitHandler = (event) => {
     event.preventDefault();
@@ -103,12 +103,23 @@ const Login = () => {
         {!forgotPassword ? (
           <div className="absolute z-10 m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
             <div className="w-full text-center">
-              <CSSTransition in={isError} timeout={300} nodeRef={nodeRef} classNames="alert">
-                <div ref={nodeRef} className={`${message !== '' && "p-2 bg-customRed text-white font-bold rounded-md my-2"} `}>
+              <CSSTransition
+                in={isError}
+                timeout={300}
+                nodeRef={nodeRef}
+                classNames="alert"
+              >
+                <div
+                  ref={nodeRef}
+                  className={`${
+                    message !== "" &&
+                    "p-2 bg-customRed text-white font-bold rounded-md my-2"
+                  } `}
+                >
                   <p>{message}</p>
                 </div>
               </CSSTransition>
-              
+
               <h1 className="pb-4 text-2xl font-bold text-customBlue">
                 Bejelentkezés
               </h1>

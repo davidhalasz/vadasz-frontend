@@ -6,7 +6,10 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isSuccessAuth: false,
+  isErrorAuth: false,
   message: '',
+  authMessage: "",
 };
 
 export const loginUser = createAsyncThunk(
@@ -69,17 +72,29 @@ export const authSlice = createSlice({
       state.isError = false;
       state.message = "";
     },
+    addMessageHandler(state, action) {
+      const payload = action.payload;
+      state.isErrorAuth = payload.messageType === "error" ? true : false;
+      state.isSuccessAuth = payload.messageType === "success" ? true : false;
+      state.authMessage = payload.message;
+    },
+    removeAuthMessageHandler(state, action) {
+      console.log("called remove");
+      state.isErrorAuth = false;
+      state.isSuccessAuth = false;
+      state.authMessage = "";
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.user = action.payload.user;
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
       state.message = '';
-      state.user = action.payload.user;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isLoading = false;
@@ -92,11 +107,11 @@ export const authSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+      state.user = action.payload.user;
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
       state.message = '';
-      state.user = action.payload.user;
     });
     builder.addCase(getCurrentUser.rejected, (state, action) => {
       state.isLoading = false;
@@ -106,5 +121,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { reset, resetError } = authSlice.actions;
+export const { reset, resetError, addMessageHandler, removeAuthMessageHandler } = authSlice.actions;
 export default authSlice.reducer;

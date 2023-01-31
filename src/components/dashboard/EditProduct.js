@@ -31,10 +31,7 @@ const EditProduct = (props) => {
   const dispatch = useDispatch();
   let location = useLocation();
   const prod = location.state.product;
-  let prodImages = [];
-  if (prod.images) {
-    prodImages = prod.images.split(", ");
-  }
+  let prodImages = [...prod['images']];
   const navigate = useNavigate();
   const fileReader = new FileReader();
   const savedImages = prodImages;
@@ -68,9 +65,8 @@ const EditProduct = (props) => {
     true
   );
 
-  const jsonSavedCity = JSON.parse(prod.place);
   const cityIndex = jsoncities.findIndex(function (item, i) {
-    return item.nev === jsonSavedCity.nev;
+    return item.nev === prod.place.city;
   });
 
   const initSelectValue = {
@@ -223,7 +219,7 @@ const EditProduct = (props) => {
 
     try {
       const response = await axios.patch(
-        `${process.env.REACT_APP_BACKEND_URL}/product/${prod.uuid}`,
+        `${process.env.REACT_APP_BACKEND_URL}/product/${prod._id}`,
         formData
       );
       dispatch(productActions.addMessageHandler({messageType: "success", message: response.data.msg}));

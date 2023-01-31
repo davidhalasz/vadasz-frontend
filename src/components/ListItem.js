@@ -1,37 +1,24 @@
 import { Link } from "react-router-dom";
 
 const ListItem = (props) => {
-  const getImage = (str) => {
-    if (str) {
-      const images = str.split(", ");
-      return (
-        <img
-          className="h-full w-full object-cover h-20 w-20 border border-1 border-customGreen rounded-sm"
-          src={process.env.REACT_APP_ASSET_URL + "/" + images[0]}
-          alt="public"
-        />
-      );
-    }
-    return;
-  };
-
-  const getCity = (jsonStr) => {
-    const json = JSON.parse(jsonStr);
-    return json.nev;
-  };
-
   return (
     <div
-      key={props.product.uuid}
+      key={props.product._id}
       className={`bg-${props.cardColor} w-full p-1 rounded-md my-2`}
     >
       <Link
-        to={{ pathname: `/hirdetesek/${props.product.uuid}` }}
+        to={{ pathname: `/hirdetesek/${props.product._id}` }}
         state={{ product: props.product }}
       >
         <div className="w-full rounded-md flex flex-row gap-3">
           <div className="h-20 w-20 shrink-0 my-1 ml-1 rounded-md">
-            {getImage(props.product.images) ?? (
+            {props.product['images'][0] ? (
+              <img
+                className="h-full w-full object-cover h-20 w-20 border border-1 border-customGreen rounded-sm"
+                src={process.env.REACT_APP_ASSET_URL + "/" + props.product['images'][0]}
+                alt="public"
+              />
+            ) : (
               <img
                 alt="avat"
                 className="h-full w-full object-cover h-20 w-20"
@@ -49,7 +36,7 @@ const ListItem = (props) => {
                   {props.product.price.toLocaleString()} Ft
                 </p>
                 <p className="py-1 px-2 rounded-md">
-                  {getCity(props.product.place)}
+                  {props.product.place.city}
                 </p>
               </div>
             </div>

@@ -207,9 +207,8 @@ const productSlice = createSlice({
 
       // get all counties
       action.payload.forEach(prod => {
-        let place = JSON.parse(prod.place);
-        if (!state.counties.includes(place.megye)) {
-          state.counties.push(place.megye);
+        if (!state.counties.includes(prod.place.county)) {
+          state.counties.push(prod.place.county);
         }
       });
 

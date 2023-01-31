@@ -4,15 +4,15 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const Activation = () => {
   const [activated, setActivated] = useState(false);
-  const { uuid } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const activationHandler = async () => {
       setActivated(false);
       try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/user/activation/${uuid}`
+        await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/user/activation/${id}`
         );
         setActivated(true);
       } catch (error) {
@@ -20,7 +20,7 @@ const Activation = () => {
       }
     };
     activationHandler();
-  }, [uuid]);
+  }, [id]);
 
   useEffect(() => {
     if (activated) {

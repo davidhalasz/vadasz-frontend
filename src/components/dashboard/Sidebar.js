@@ -95,7 +95,7 @@ const Sidebar = (props) => {
               </button>
             </NavLink>
             {props.user && (
-              <NavLink to={`/kezelofelulet/adataim/${props.user.uuid}`}>
+              <NavLink to={`/kezelofelulet/adataim/${props.user._id}`}>
                 <button className="w-full p-3 backdrop-opacity-10 bg-black/10 rounded-md text-center my-2">
                   Profil adatok
                 </button>

@@ -27,27 +27,6 @@ const MainProductList = () => {
     (state) => state.products.filteredProducts
   );
 
-  const getImage = (str) => {
-    if (str) {
-      const images = str.split(", ");
-      return (
-        <img
-          className="h-full w-full object-cover h-20 w-20 border border-1 border-customGreen rounded-sm"
-          src={`${process.env.REACT_APP_ASSET_URL}/${images[0]}`}
-          alt="public"
-        />
-      );
-    }
-    return;
-  };
-
-  const getCity = (jsonStr) => {
-    if (jsonStr) {
-      const json = JSON.parse(jsonStr);
-      return json.nev;
-    }
-  };
-
   function fetchMoreListItems() {
     setTimeout(() => {
       setIsFetching(false);
@@ -86,21 +65,27 @@ const MainProductList = () => {
                   .slice(0, numberOfItemsShown)
                   .map((product, index) => (
                     <CSSTransition
-                      key={product.uuid}
+                      key={product._id}
                       timeout={500}
                       classNames="item"
                     >
                       <div
-                        key={product.uuid}
+                        key={product._id}
                         className={product.featured ? featuredBg : baseBg}
                       >
                         <Link
-                          to={{ pathname: `/hirdetesek/${product.uuid}` }}
+                          to={{ pathname: `/hirdetesek/${product._id}` }}
                           state={{ product: product }}
                         >
                           <div className="w-full rounded-md flex flex-row gap-3">
                             <div className="h-20 w-20 shrink-0 my-1  ml-1 rounded-md">
-                              {getImage(product.images) ?? (
+                              {product["images"][0] ? (
+                                <img
+                                  className="h-full w-full object-cover h-20 w-20 border border-1 border-customGreen rounded-sm"
+                                  src={`${process.env.REACT_APP_ASSET_URL}/${product["images"][0]}`}
+                                  alt="public"
+                                />
+                              ) : (
                                 <img
                                   alt="avat"
                                   className="h-full w-full object-cover h-20 w-20"
@@ -124,7 +109,7 @@ const MainProductList = () => {
                                     {product.price.toLocaleString()} Ft
                                   </p>
                                   <p className=" py-1 px-2 rounded-md">
-                                    {getCity(product.place)}
+                                    {product.place.city}
                                   </p>
                                 </div>
                               </div>

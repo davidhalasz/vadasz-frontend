@@ -50,13 +50,13 @@ function App() {
     { path: "/", element: <Home /> },
     { path: "/bejelentkezes", element: <Login /> },
     { path: "/regisztracio", element: <Register /> },
-    { path: "/activation/:uuid", element: <Activation />},
+    { path: "/activation/:id", element: <Activation />},
     {
       path: "/hirdetesek",
       element: <Products />,
       children: [
         { path: "", element: <MainProductList /> },
-        { path: ":uuid", element: <ShowProduct /> },
+        { path: ":id", element: <ShowProduct /> },
       ],
     },
     {
@@ -65,9 +65,9 @@ function App() {
       children: [
         { path: "feltoltott-hirdetesek", element: <ProductList /> },
         { path: "uj-hirdetes", element: <AddProduct /> },
-        { path: "hirdetes-szerkesztese/:uuid", element: <EditProduct /> },
-        { path: "adataim/:uuid", element: <UserProfile /> },
-        { path: "hirdetes/:uuid", element: <ShowProduct /> },
+        { path: "hirdetes-szerkesztese/:id", element: <EditProduct /> },
+        { path: "adataim/:id", element: <UserProfile /> },
+        { path: "hirdetes/:id", element: <ShowProduct /> },
       ],
     },
   ]);

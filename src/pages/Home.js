@@ -69,7 +69,7 @@ const Home = () => {
           product.featured && (
             <ListItem
               product={product}
-              key={product.uuid}
+              key={product._id}
               cardColor={"customBlue"}
             />
           )
@@ -88,7 +88,7 @@ const Home = () => {
       return products.slice(0, 10).map((product) => (
         <ListItem
           product={product}
-          key={product.uuid}
+          key={product._id}
           cardColor={"customPurple"}
         />
       ));

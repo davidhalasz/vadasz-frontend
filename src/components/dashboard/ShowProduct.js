@@ -6,47 +6,29 @@ import "../../shared/scroll.css";
 
 const ShowProduct = () => {
   const { toggleDisplay, selectImage } = useContext(ImageViewerContext);
-  const { uuid } = useParams();
+  const { id } = useParams();
   const [product, setProduct] = useState("");
 
   useEffect(() => {
     const getProduct = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/product/${uuid}`
+          `${process.env.REACT_APP_BACKEND_URL}/product/${id}`
         );
-        setProduct(response.data);
+        setProduct(response.data.product);
       } catch (error) {
         console.log(error);
       }
     };
 
     getProduct();
-  }, [uuid]);
-
-
-  let images = [];
-  if (product.images) {
-    images = product.images.split(", ");
-    console.log("images: " + images);
-  }
-
-  const getPlace = (jsonStr) => {
-    if (jsonStr) {
-      const json = JSON.parse(jsonStr);
-      return `${json.nev} (${json.megye} vármegye)`;
-    }
-  };
+  }, [id]);
 
   const getArrayOfImages = () => {
-    if (images) {
-      if (images.length === 1) return;
+    if (product['images']) {
+      if (product['images'].length === 1) return;
 
-      let first = images[0];
-      let selectedImages = images.filter((x) => {
-        return x !== first;
-      });
-      return selectedImages.map((img, index) => (
+      return product['images'].slice(1).map((img, index) => (
         <img
           onClick={() => openImageViewer(img)}
           key={index}
@@ -60,11 +42,12 @@ const ShowProduct = () => {
   };
 
   const openImageViewer = (currentImage) => {
-    selectImage(currentImage, images);
+    selectImage(currentImage, product['images']);
     toggleDisplay();
   };
 
   return (
+    product &&
     <div className="h-full relative pt-0 pb-14 pl-1 md:pl-8 scrollhost_container">
       <h1 className="font-bold text-customBlue text-xl md:text-2xl py-8 px-3">
         {product.title}
@@ -73,12 +56,12 @@ const ShowProduct = () => {
         <div className="w-full md:w-3/12 mx-auto">
           <div className="w-7/12 md:w-full mx-auto">
             <img
-              onClick={() => openImageViewer(images[0])}
+              onClick={() => openImageViewer(product['images'][0])}
               alt="avat"
               className="w-full aspect-square object-cover pb-1"
               src={
-                images[0]
-                  ? `${process.env.REACT_APP_ASSET_URL}/${images[0]}`
+                product['images'][0]
+                  ? `${process.env.REACT_APP_ASSET_URL}/${product['images'][0]}`
                   : "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Deer_%28example%29.svg/1024px-Deer_%28example%29.svg.png?20180723123450"
               }
             />
@@ -91,7 +74,7 @@ const ShowProduct = () => {
           </h2>
           <div className="mb-4 p-3">
             <div className="flex flex-col gap-2 pb-4 text-lg">
-              <table class="table-auto">
+              <table className="table-auto">
                 <tbody>
                   <tr>
                     <td className="py-2 border-b border-slate-200">Ár</td>
@@ -102,7 +85,7 @@ const ShowProduct = () => {
                   <tr>
                     <td className="py-2 border-b border-slate-200">Helye</td>
                     <td className="py-2 border-b border-slate-200">
-                      {getPlace(product.place)}
+                      {product.place.city} ({product.place.county} vármegye)
                     </td>
                   </tr>
                   <tr>
