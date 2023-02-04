@@ -2,6 +2,7 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AlertContext } from "../../context/AlertContext";
+import he from "he";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -71,7 +72,7 @@ const ProductList = () => {
                     <div className="w-full flex flex-col text-white">
                       <div className="w-full flex justify-between pb-2">
                         <h3 className="font-bold py-1 px-2 rounded-md">
-                          {product.title}
+                          {he.decode(product.title)}
                         </h3>
                         <div className="flex gap-1">
                           <p className="py-1 px-2 rounded-md whitespace-nowrap">
@@ -83,7 +84,7 @@ const ProductList = () => {
                         </div>
                       </div>
                       <p className="line-clamp-2 overflow-hidden mb-2">
-                        {product.desc}
+                        {he.decode(product.desc)}
                       </p>
                     </div>
                   </div>

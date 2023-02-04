@@ -19,8 +19,14 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
-  const { user, isSuccessAuth, isErrorAuth, authMessage, isLoading } =
-    useSelector((state) => state.auth);
+  const {
+    user,
+    isSuccessAuth,
+    isErrorAuth,
+    authMessage,
+    isLoading,
+    isSuccess,
+  } = useSelector((state) => state.auth);
   const { isErrorProduct, isSuccessProduct, productMessage } = useSelector(
     (state) => state.products
   );
@@ -48,16 +54,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getCurrentUser());
-    
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        navigate("/");
+    if (isLoading === false) {
+      if (isSuccess === false) {
+        if (!user) {
+          navigate("/");
+        }
       }
     }
-  }, [user, navigate, isLoading]);
+  }, [user, navigate, isLoading, isSuccess]);
 
   useEffect(() => {
     if (isErrorProduct || isSuccessProduct) {

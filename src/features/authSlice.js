@@ -4,8 +4,8 @@ import axios from "axios";
 const initialState = {
   user: null,
   isError: false,
-  isSuccess: false,
-  isLoading: false,
+  isSuccess: true,
+  isLoading: true,
   isSuccessAuth: false,
   isErrorAuth: false,
   message: '',
@@ -109,13 +109,14 @@ export const authSlice = createSlice({
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.user = action.payload.user;
       state.isLoading = false;
-      state.isSuccess = true;
       state.isError = false;
       state.message = '';
+      state.isSuccess = true;
     });
     builder.addCase(getCurrentUser.rejected, (state, action) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isSuccess = false;
+      state.isError = true;
       state.message = '';
     });
   },

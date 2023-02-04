@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ImageViewerContext } from "../../context/ImageViewerContext";
 import "../../shared/scroll.css";
+import he from "he";
 
 const ShowProduct = () => {
   const { toggleDisplay, selectImage } = useContext(ImageViewerContext);
@@ -50,7 +51,7 @@ const ShowProduct = () => {
     product &&
     <div className="h-full relative pt-0 pb-14 pl-1 md:pl-8 scrollhost_container">
       <h1 className="font-bold text-customBlue text-xl md:text-2xl py-8 px-3">
-        {product.title}
+        {he.decode(product.title)}
       </h1>
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-3/12 mx-auto">
@@ -131,7 +132,7 @@ const ShowProduct = () => {
                 </tbody>
               </table>
             </div>
-            <p>{product.desc}</p>
+            <p>{he.decode(product.desc)}</p>
           </div>
 
           <h2 className="p-3 bg-customGreen w-full text-white text-lg font-bold rounded-l-md">
@@ -139,7 +140,7 @@ const ShowProduct = () => {
           </h2>
           {product.user && (
             <div className="mb-4 p-3 flex flex-col gap-2 text-lg">
-              <table class="table-auto">
+              <table className="table-auto">
                 <tbody>
                   <tr>
                     <td className="py-2 border-b border-slate-200">Név</td>

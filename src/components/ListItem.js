@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import he from "he";
+
 const ListItem = (props) => {
   return (
     <div
@@ -29,7 +31,7 @@ const ListItem = (props) => {
           <div className="w-full flex flex-col text-white">
             <div className="w-full flex justify-between pb-2">
               <h3 className="font-bold py-1 px-2 rounded-md">
-                {props.product.title}
+                {he.decode(props.product.title)}
               </h3>
               <div className="flex gap-1">
                 <p className="py-1 px-2 rounded-md whitespace-nowrap">
@@ -41,7 +43,7 @@ const ListItem = (props) => {
               </div>
             </div>
             <p className="line-clamp-2 overflow-hidden mb-2">
-              {props.product.desc}
+              {he.decode(props.product.desc)}
             </p>
           </div>
         </div>

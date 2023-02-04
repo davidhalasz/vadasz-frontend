@@ -11,6 +11,7 @@ import {
 import jsoncities from "../../shared/cities";
 import { useDispatch } from "react-redux";
 import { productActions } from "../../features/productSlice";
+import he from "he";
 
 const activeImg = "grayscale object-cover object-center w-full h-full";
 const deactivateImg = "object-cover object-center w-full h-full";
@@ -46,7 +47,7 @@ const EditProduct = (props) => {
   const [formState, inputHandler] = useForm(
     {
       title: {
-        value: prod.title,
+        value: he.decode(prod.title),
         isValid: true,
       },
       price: {
@@ -54,7 +55,7 @@ const EditProduct = (props) => {
         isValid: true,
       },
       desc: {
-        value: prod.desc,
+        value: he.decode(prod.desc),
         isValid: true,
       },
       madeYear: {
