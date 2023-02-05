@@ -47,6 +47,9 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!isLoading) {
       if (user) {
         navigate("/kezelofelulet/feltoltott-hirdetesek", { replace: true });
@@ -54,7 +57,7 @@ const Login = () => {
         dispatch(reset());
       }
     }
-  }, [dispatch, user, isLoading, navigate]);
+  }, [user, isLoading, navigate]);
 
   const loginSubmitHandler = (event) => {
     event.preventDefault();
