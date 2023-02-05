@@ -52,7 +52,7 @@ export const useAlert = () => {
       setChangedData(false);
     }
     setDisplayAlert(!displayAlert);
-  }, [uuid, type, currentProduct, displayAlert]);
+  }, [dispatch, uuid, type, currentProduct, displayAlert]);
 
   const changedDataHandler = useCallback(() => {
     setChangedData(!changedData);

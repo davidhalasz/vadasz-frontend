@@ -57,7 +57,7 @@ const Login = () => {
         dispatch(reset());
       }
     }
-  }, [user, isLoading, navigate]);
+  }, [dispatch, user, isLoading, navigate]);
 
   const loginSubmitHandler = (event) => {
     event.preventDefault();
