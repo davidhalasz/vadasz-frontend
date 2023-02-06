@@ -9,16 +9,21 @@ import {
   VALIDATOR_TELEPHONE,
 } from "../../shared/util/validators";
 import axios from "axios";
-import { addMessageHandler, getCurrentUser, reset } from "../../features/authSlice";
+import {
+  addMessageHandler,
+  getCurrentUser,
+  reset,
+} from "../../features/authSlice";
 import { AlertContext } from "../../context/AlertContext";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const { user, isLoading, isSuccess } = useSelector((state) => state.auth);
   const [isTelephoneInput, setIsTelephoneInput] = useState(false);
   const [isNameInput, setIsNameInput] = useState(false);
+
   const [formState, inputHandler] = useForm(
     {
       telephone: {
@@ -40,8 +45,26 @@ const UserProfile = () => {
     },
     false
   );
-  const { toggleAlertDisplay, changeCurrentUserId, changedData, changedDataHandler} =
-    useContext(AlertContext);
+  const {
+    toggleAlertDisplay,
+    changeCurrentUserId,
+    changedData,
+    changedDataHandler,
+  } = useContext(AlertContext);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      if (isSuccess === false) {
+        if (!user) {
+          navigate("/");
+        }
+      }
+    }
+  }, [user, navigate, isLoading, isSuccess]);
 
   useEffect(() => {
     if (changedData) {
@@ -63,13 +86,23 @@ const UserProfile = () => {
             telephone: telephone,
           }
         );
-        
+
         setIsTelephoneInput(false);
         dispatch(getCurrentUser());
-        dispatch(addMessageHandler({messageType: "success", message: response.data.msg}));
+        dispatch(
+          addMessageHandler({
+            messageType: "success",
+            message: response.data.msg,
+          })
+        );
       } catch (error) {
         console.log(error);
-        dispatch(addMessageHandler({messageType: "error", message: error.response.data.msg}));
+        dispatch(
+          addMessageHandler({
+            messageType: "error",
+            message: error.response.data.msg,
+          })
+        );
       }
     }
   };
@@ -87,10 +120,20 @@ const UserProfile = () => {
         );
         setIsNameInput(false);
         dispatch(getCurrentUser());
-        dispatch(addMessageHandler({messageType: "success", message: response.data.msg}));
+        dispatch(
+          addMessageHandler({
+            messageType: "success",
+            message: response.data.msg,
+          })
+        );
       } catch (error) {
         console.log(error);
-        dispatch(addMessageHandler({messageType: "error", message: error.response.data.msg}));
+        dispatch(
+          addMessageHandler({
+            messageType: "error",
+            message: error.response.data.msg,
+          })
+        );
       }
     }
   };
@@ -112,10 +155,20 @@ const UserProfile = () => {
           }
         );
         dispatch(getCurrentUser());
-        dispatch(addMessageHandler({messageType: "success", message: response.data.msg}));
+        dispatch(
+          addMessageHandler({
+            messageType: "success",
+            message: response.data.msg,
+          })
+        );
       } catch (error) {
         console.log(error);
-        dispatch(addMessageHandler({messageType: "error", message: error.response.data.msg}));
+        dispatch(
+          addMessageHandler({
+            messageType: "error",
+            message: error.response.data.msg,
+          })
+        );
       }
     }
   };

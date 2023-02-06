@@ -1,10 +1,14 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AlertContext } from "../../context/AlertContext";
+import { getCurrentUser } from "../../features/authSlice";
 import he from "he";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductList = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const {
     toggleAlertDisplay,
@@ -12,6 +16,26 @@ const ProductList = () => {
     changedDataHandler,
     changeCurrentProductId,
   } = useContext(AlertContext);
+
+  const {
+    user,
+    isLoading,
+    isSuccess,
+  } = useSelector((state) => state.auth); 
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      if (isSuccess === false) {
+        if (!user) {
+          navigate("/");
+        }
+      }
+    }
+  }, [user, navigate, isLoading, isSuccess]);
 
   useEffect(() => {
     getProducts();

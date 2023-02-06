@@ -10,8 +10,9 @@ import {
   VALIDATOR_YEAR,
 } from "../../shared/util/validators";
 import jsoncities from "../../shared/cities";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../../features/productSlice";
+import { getCurrentUser } from "../../features/authSlice";
 
 const CAT_FEGYVEREK = [
   "Golyós puska",
@@ -31,6 +32,11 @@ const AddProduct = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [featured, setFeatured] = useState(false);
+  const {
+    user,
+    isLoading,
+    isSuccess,
+  } = useSelector((state) => state.auth); 
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -52,6 +58,20 @@ const AddProduct = () => {
     },
     false
   );
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoading === false) {
+      if (isSuccess === false) {
+        if (!user) {
+          navigate("/");
+        }
+      }
+    }
+  }, [user, navigate, isLoading, isSuccess]);
 
   const initSelectValue = {
     selectCity: {
