@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group";
 import "./productSnackbar.css";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
   const {
@@ -58,13 +58,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (isLoading === false) {
-      if (isSuccess === false) {
-        if (!user) {
-          navigate("/");
-        }
+      if (!user) {
+        navigate("/");
       }
     }
-  }, [user, navigate, isLoading, isSuccess]);
+  }, [user, navigate, isLoading]);
 
   useEffect(() => {
     if (isErrorProduct || isSuccessProduct) {

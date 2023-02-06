@@ -54,17 +54,18 @@ const UserProfile = () => {
 
   useEffect(() => {
     dispatch(getCurrentUser());
+    console.log("called getcurrent");
   }, [dispatch]);
 
   useEffect(() => {
     if (isLoading === false) {
-      if (isSuccess === false) {
-        if (!user) {
-          navigate("/");
-        }
+      console.log(user);
+      if (!user) {
+        console.log("no user");
+        navigate("/");
       }
     }
-  }, [user, navigate, isLoading, isSuccess]);
+  }, [user, navigate, isLoading]);
 
   useEffect(() => {
     if (changedData) {

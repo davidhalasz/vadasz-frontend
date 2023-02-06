@@ -47,7 +47,7 @@ export const getCurrentUser = createAsyncThunk(
         const message = error.response.data.msg;
         return thunkAPI.rejectWithValue(message);
       }
-    }
+    } 
   }
 );
 
@@ -118,6 +118,7 @@ export const authSlice = createSlice({
       state.isSuccess = false;
       state.isError = true;
       state.message = '';
+      state.user = null;
     });
   },
 });

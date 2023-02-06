@@ -29,13 +29,11 @@ const ProductList = () => {
 
   useEffect(() => {
     if (isLoading === false) {
-      if (isSuccess === false) {
-        if (!user) {
-          navigate("/");
-        }
+      if (!user) {
+        navigate("/");
       }
     }
-  }, [user, navigate, isLoading, isSuccess]);
+  }, [user, navigate, isLoading]);
 
   useEffect(() => {
     getProducts();

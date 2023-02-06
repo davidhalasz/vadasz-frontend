@@ -78,13 +78,11 @@ const EditProduct = (props) => {
 
   useEffect(() => {
     if (isLoading === false) {
-      if (isSuccess === false) {
-        if (!user) {
-          navigate("/");
-        }
+      if (!user) {
+        navigate("/");
       }
     }
-  }, [user, navigate, isLoading, isSuccess]);
+  }, [user, navigate, isLoading]);
 
   const cityIndex = jsoncities.findIndex(function (item, i) {
     return item.nev === prod.place.city;
