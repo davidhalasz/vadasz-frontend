@@ -29,12 +29,12 @@ const ListItem = (props) => {
             )}
           </div>
           <div className="w-full flex flex-col text-white">
-            <div className="w-full flex justify-between pb-2">
+            <div className="w-full flex flex-col lg:flex-row lg:justify-between pb-2">
               <h3 className="font-bold py-1 px-2 rounded-md">
                 {he.decode(props.product.title)}
               </h3>
               <div className="flex gap-1">
-                <p className="py-1 px-2 rounded-md whitespace-nowrap">
+                <p className="py-1 px-2 rounded-md lg:whitespace-nowrap">
                   {props.product.price.toLocaleString()} Ft
                 </p>
                 <p className="py-1 px-2 rounded-md">

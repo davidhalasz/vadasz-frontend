@@ -1,6 +1,6 @@
 const BaseFooter = () => {
   return (
-    <div className="h-full w-full bg-customBlue text-white py-10">
+    <div className="w-full bg-customBlue text-white py-10">
       <div className="container mx-auto grid grid-cols-3 divider">
         <div>
           <h2 className="text-left pb-4 text-lg font-bold">Kapcsolat</h2>

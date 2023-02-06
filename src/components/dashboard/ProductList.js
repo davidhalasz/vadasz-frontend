@@ -70,7 +70,7 @@ const ProductList = () => {
                       )}
                     </div>
                     <div className="w-full flex flex-col text-white">
-                      <div className="w-full flex justify-between pb-2">
+                      <div className="w-full flex flex-col lg:flex-row justify-between pb-2">
                         <h3 className="font-bold py-1 px-2 rounded-md">
                           {he.decode(product.title)}
                         </h3>

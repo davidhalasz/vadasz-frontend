@@ -13,7 +13,7 @@ const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const {products, isLoading } = useSelector((state) => state.products);
+  const { products, isLoading } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -64,16 +64,18 @@ const Home = () => {
     });
 
     if (isThereFeatured) {
-      return products.slice(0, 10).map(
-        (product) =>
-          product.featured && (
-            <ListItem
-              product={product}
-              key={product._id}
-              cardColor={"customBlue"}
-            />
-          )
-      );
+      return products
+        .slice(0, 10)
+        .map(
+          (product) =>
+            product.featured && (
+              <ListItem
+                product={product}
+                key={product._id}
+                cardColor={"customBlue"}
+              />
+            )
+        );
     } else {
       return (
         <p className="text-center font-bold text-lg">
@@ -85,13 +87,15 @@ const Home = () => {
 
   const getLatestProducts = () => {
     if (typeof products !== "undefined" && products.length > 0) {
-      return products.slice(0, 10).map((product) => (
-        <ListItem
-          product={product}
-          key={product._id}
-          cardColor={"customPurple"}
-        />
-      ));
+      return products
+        .slice(0, 10)
+        .map((product) => (
+          <ListItem
+            product={product}
+            key={product._id}
+            cardColor={"customPurple"}
+          />
+        ));
     } else {
       return (
         <p className="text-center font-bold text-lg">
@@ -102,7 +106,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="relative flex flex-col">
       <div className="flex flex-col md:grid md:grid-cols-2 md:h-screen w-full">
         <div className="relative h-full w-full bg-customYellow flex">
           <div className="absolute w-full">
@@ -183,8 +187,8 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="relative w-full md:overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2  max-h-screen md:h-screen w-full">
+      <div className="w-full">
+        <div className="relative grid grid-cols-1 md:grid-cols-2  max-h-screen md:h-screen w-full">
           <div className="w-full max-h-screen bg-white justify-between">
             <div className="h-full flex flex-col">
               <div className="grow-0 p-8 font-extrabold flex-none">
@@ -194,7 +198,7 @@ const Home = () => {
               </div>
               <div className="grow h-fit scrollhost_container">
                 <div className="flex flex-col mx-3 gap-1">
-                  {isLoading ? <LoadingSpinner/> : getFeaturedProducts()}
+                  {isLoading ? <LoadingSpinner /> : getFeaturedProducts()}
                 </div>
               </div>
               <div className="grow-0 h-fit w-full pr-14 py-3">
@@ -222,13 +226,13 @@ const Home = () => {
                   Legutóbb feltöltött
                 </span>
               </div>
-              <div className="grow scrollhost_container flex-1">
-                <div className="flex flex-col mx-3 h-fit">
-                  {isLoading ? <LoadingSpinner/> : getLatestProducts()}
+              <div className="grow h-fit scrollhost_container">
+                <div className="flex flex-col mx-3 gap-1">
+                  {isLoading ? <LoadingSpinner /> : getLatestProducts()}
                 </div>
               </div>
 
-              <div className="grow-0 w-full pl-14 py-3 flex-none">
+              <div className="grow-0 h-fit w-full pl-14 py-3">
                 <Link
                   to={{ pathname: "/hirdetesek" }}
                   onClick={() => dispatch(productActions.resetFilter())}
@@ -242,9 +246,42 @@ const Home = () => {
               </div>
             </div>
           </div>
+
+          <div className="w-full bg-customBlue text-white py-10 md:col-span-2">
+            <div className="container mx-auto grid grid-cols-3 divider">
+              <div>
+                <h2 className="text-left pb-4 text-lg font-bold">Kapcsolat</h2>
+                <ul>
+                  <li>lorem</li>
+                  <li>ipsum</li>
+                  <li>dolot</li>
+                  <li>etevgg</li>
+                </ul>
+              </div>
+              <div>
+                <h2 className="text-left pb-4 text-lg font-bold">Valami</h2>
+                <ul>
+                  <li>lorem</li>
+                  <li>ipsum</li>
+                  <li>dolot</li>
+                  <li>etevgg</li>
+                </ul>
+              </div>
+              <div>
+                <h2 className="text-left pb-4 text-lg font-bold">
+                  Lorem ipsum
+                </h2>
+                <ul>
+                  <li>lorem</li>
+                  <li>ipsum</li>
+                  <li>dolot</li>
+                  <li>etevgg</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <BaseFooter />
     </div>
   );
 };
