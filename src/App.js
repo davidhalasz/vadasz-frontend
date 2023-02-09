@@ -46,7 +46,6 @@ const MainProductList = React.lazy(() =>
 */
 
 function App() {
-  const basename = process.env.REACT_APP_BASENAME || null; 
   let routes = createBrowserRouter([
     { path: "/", element: <Home /> },
     { path: "/bejelentkezes", element: <Login /> },
@@ -71,9 +70,7 @@ function App() {
         { path: "hirdetes/:id", element: <ShowProduct /> },
       ],
     },
-  ], {
-    basename: basename,
-  });
+  ]);
   return (
     <main>
         <RouterProvider router={routes} />
