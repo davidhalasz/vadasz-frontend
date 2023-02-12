@@ -63,7 +63,7 @@ const ShowProduct = () => {
               src={
                 product['images'][0]
                   ? `${process.env.REACT_APP_ASSET_URL}/${product['images'][0]}`
-                  : "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Deer_%28example%29.svg/1024px-Deer_%28example%29.svg.png?20180723123450"
+                  : `${process.env.REACT_APP_ASSET_URL + "/images/logo.png"}`
               }
             />
           </div>

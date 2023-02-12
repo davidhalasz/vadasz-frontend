@@ -89,7 +89,7 @@ const MainProductList = () => {
                                 <img
                                   alt="avat"
                                   className="h-full w-full object-cover h-20 w-20"
-                                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Deer_%28example%29.svg/1024px-Deer_%28example%29.svg.png?20180723123450"
+                                  src={process.env.REACT_APP_ASSET_URL + "/images/logo.png"}
                                 />
                               )}
                             </div>
