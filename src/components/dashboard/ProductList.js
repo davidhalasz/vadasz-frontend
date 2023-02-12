@@ -5,7 +5,7 @@ import { AlertContext } from "../../context/AlertContext";
 import { getCurrentUser } from "../../features/authSlice";
 import he from "he";
 import { useDispatch, useSelector } from "react-redux";
-import logo from "../uploads/images/logo.png";
+import logo from "../../uploads/images/logo.png";
 
 const ProductList = () => {
   const dispatch = useDispatch();

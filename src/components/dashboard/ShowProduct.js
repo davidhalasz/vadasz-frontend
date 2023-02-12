@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ImageViewerContext } from "../../context/ImageViewerContext";
 import "../../shared/scroll.css";
-import logo from "../uploads/images/logo.png";
+import logo from "../../uploads/images/logo.png";
 import he from "he";
 
 const ShowProduct = () => {
