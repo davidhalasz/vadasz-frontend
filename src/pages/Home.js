@@ -115,7 +115,7 @@ const Home = () => {
               <div className="text-xl">
                 <img
                   alt="logo"
-                  className="h-full w-full object-cover h-20 w-20"
+                  className="object-cover h-18 w-18"
                   src={logo}
                 />
               </div>

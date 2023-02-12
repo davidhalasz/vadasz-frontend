@@ -5,7 +5,7 @@ import { fetchProducts, productActions } from "../features/productSlice";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "./MainProductList.css";
 import LoadingSpinner from "../shared/LoadingSpinner";
-
+import logo from '../uploads/images/logo.png';
 const featuredBg = "w-full bg-customYellow p-1 rounded-md my-2 text-customBlue";
 const baseBg = "w-full bg-customBlue p-1 rounded-md my-2 text-white";
 
@@ -89,7 +89,7 @@ const MainProductList = () => {
                                 <img
                                   alt="avat"
                                   className="h-full w-full object-cover h-20 w-20"
-                                  src={process.env.REACT_APP_ASSET_URL + "/images/logo.png"}
+                                  src={logo}
                                 />
                               )}
                             </div>
