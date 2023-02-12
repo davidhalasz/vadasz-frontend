@@ -24,7 +24,7 @@ const ListItem = (props) => {
               <img
                 alt="avat"
                 className="h-full w-full object-cover h-20 w-20"
-                src={process.env.REACT_APP_ASSET_URL + "/images/logo.png"}
+                src={process.env.REACT_APP_ASSET_URL + "/uploads/images/logo.png"}
               />
             )}
           </div>
