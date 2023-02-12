@@ -24,7 +24,7 @@ const ListItem = (props) => {
             ) : (
               <img
                 alt="avat"
-                className="h-full w-full object-cover h-20 w-20"
+                className="object-cover h-20 w-auto"
                 src={logo}
               />
             )}

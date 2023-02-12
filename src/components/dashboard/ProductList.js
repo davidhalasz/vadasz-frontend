@@ -80,14 +80,14 @@ const ProductList = () => {
                     <div className="h-20 w-20 shrink-0 mt-1 ml-1 rounded-md">
                       {product['images'].length > 0 ? (
                         <img
-                          className="h-full w-full object-cover h-20 w-20 border border-1 border-customGreen rounded-sm"
+                          className="object-cover h-20 w-20 border border-1 border-customGreen rounded-sm"
                           src={`${process.env.REACT_APP_ASSET_URL}/${product['images'][0]}`}
                           alt="public"
                         />
                       ) : (
                         <img
                           alt="avat"
-                          className="h-full w-full object-cover h-20 w-20"
+                          className="object-cover h-20 w-auto"
                           src={logo}
                         />
                       )}
