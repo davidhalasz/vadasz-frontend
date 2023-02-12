@@ -6,7 +6,6 @@ import { getCurrentUser } from "../features/authSlice";
 import { fetchProducts, productActions } from "../features/productSlice";
 import ListItem from "../components/ListItem";
 import "./Home.css";
-import BaseFooter from "../components/BaseFooter";
 import LoadingSpinner from "../shared/LoadingSpinner";
 import logo from "../uploads/images/logo.png";
 
@@ -115,7 +114,7 @@ const Home = () => {
               <div className="text-xl">
                 <img
                   alt="logo"
-                  className="h-16 w-auto object-cover"
+                  className="h-[70px] w-auto object-cover"
                   src={logo}
                 />
               </div>
