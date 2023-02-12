@@ -5,6 +5,7 @@ import { AlertContext } from "../../context/AlertContext";
 import { getCurrentUser } from "../../features/authSlice";
 import he from "he";
 import { useDispatch, useSelector } from "react-redux";
+import logo from "../uploads/images/logo.png";
 
 const ProductList = () => {
   const dispatch = useDispatch();
@@ -87,7 +88,7 @@ const ProductList = () => {
                         <img
                           alt="avat"
                           className="h-full w-full object-cover h-20 w-20"
-                          src={`${process.env.REACT_APP_ASSET_URL}/uploads/images/logo.png`}
+                          src={logo}
                         />
                       )}
                     </div>

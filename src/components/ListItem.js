@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import he from "he";
+import logo from "../uploads/images/logo.png";
 
 const ListItem = (props) => {
   return (
@@ -24,7 +25,7 @@ const ListItem = (props) => {
               <img
                 alt="avat"
                 className="h-full w-full object-cover h-20 w-20"
-                src={process.env.REACT_APP_ASSET_URL + "/uploads/images/logo.png"}
+                src={logo}
               />
             )}
           </div>

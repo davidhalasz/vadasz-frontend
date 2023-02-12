@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ImageViewerContext } from "../../context/ImageViewerContext";
 import "../../shared/scroll.css";
+import logo from "../uploads/images/logo.png";
 import he from "he";
 
 const ShowProduct = () => {
@@ -63,7 +64,7 @@ const ShowProduct = () => {
               src={
                 product['images'][0]
                   ? `${process.env.REACT_APP_ASSET_URL}/${product['images'][0]}`
-                  : `${process.env.REACT_APP_ASSET_URL + "/uploads//images/logo.png"}`
+                  : {logo}
               }
             />
           </div>
