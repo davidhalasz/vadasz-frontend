@@ -60,7 +60,7 @@ const ShowProduct = () => {
             <img
               onClick={() => openImageViewer(product['images'][0])}
               alt="avat"
-              className="w-full aspect-square object-cover pb-1"
+              className={ product['images'][0] ? 'w-full aspect-square object-cover pb-1' : 'w-auto h-full object-cover'}
               src={
                 product['images'][0]
                   ? `${process.env.REACT_APP_ASSET_URL}/${product['images'][0]}`
