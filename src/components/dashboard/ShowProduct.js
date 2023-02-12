@@ -64,7 +64,7 @@ const ShowProduct = () => {
               src={
                 product['images'][0]
                   ? `${process.env.REACT_APP_ASSET_URL}/${product['images'][0]}`
-                  : {logo}
+                  : logo
               }
             />
           </div>

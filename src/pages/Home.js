@@ -8,6 +8,7 @@ import ListItem from "../components/ListItem";
 import "./Home.css";
 import BaseFooter from "../components/BaseFooter";
 import LoadingSpinner from "../shared/LoadingSpinner";
+import logo from "../uploads/images/logo.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -111,7 +112,13 @@ const Home = () => {
         <div className="relative h-full w-full bg-customYellow flex">
           <div className="absolute w-full">
             <div className="px-8 pt-2 flex justify-between">
-              <div className="text-xl">LOGO</div>
+              <div className="text-xl">
+                <img
+                  alt="logo"
+                  className="h-full w-full object-cover h-20 w-20"
+                  src={logo}
+                />
+              </div>
               <div className="flex gap-4">
                 {!user && (
                   <button
