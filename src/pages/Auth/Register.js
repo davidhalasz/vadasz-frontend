@@ -102,31 +102,27 @@ const Register = () => {
   return (
     <div>
       <div className="relative grid grid-cols-2 h-screen w-full">
-        <div className="h-full w-full bg-customOrange">
-          <button
-            className="flex p-4 top-0 left-0"
-            onClick={() => navigate("/")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-              />
-            </svg>
-            <span className="pl-2 font-bold">Vissza a főoldalra</span>
-          </button>
-        </div>
+        <div className="h-full w-full bg-customOrange"></div>
         <div className="h-full w-full bg-customMint"></div>
+        <button className="absolute z-20 flex p-4 top-0 left-0" onClick={() => navigate("/")}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+            />
+          </svg>
+          <span className="pl-2 font-bold">Vissza a főoldalra</span>
+        </button>
         {!isSentEmail ? (
-          <div className="absolute z-10 flex items-center justify-center h-screen w-screen">
+          <div className="absolute z-10 flex items-center justify-center h-full w-screen">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
               <div className="w-full text-center">
                 <CSSTransition
