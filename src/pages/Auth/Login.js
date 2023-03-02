@@ -104,123 +104,127 @@ const Login = () => {
         </div>
         <div className="h-full w-full bg-customMint"></div>
         {!forgotPassword ? (
-          <div className="absolute z-10 m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
-            <div className="w-full text-center">
-              <CSSTransition
-                in={isError}
-                timeout={300}
-                nodeRef={nodeRef}
-                classNames="alert"
-              >
-                <div
-                  ref={nodeRef}
-                  className={`${
-                    message !== "" &&
-                    "p-2 bg-customRed text-white font-bold rounded-md my-2"
-                  } `}
+          <div className="absolute z-10 flex items-center justify-center h-screen w-screen">
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
+              <div className="w-full text-center">
+                <CSSTransition
+                  in={isError}
+                  timeout={300}
+                  nodeRef={nodeRef}
+                  classNames="alert"
                 >
-                  <p>{message}</p>
-                </div>
-              </CSSTransition>
+                  <div
+                    ref={nodeRef}
+                    className={`${
+                      message !== "" &&
+                      "p-2 bg-customRed text-white font-bold rounded-md my-2"
+                    } `}
+                  >
+                    <p>{message}</p>
+                  </div>
+                </CSSTransition>
 
-              <h1 className="pb-4 text-2xl font-bold text-customBlue">
-                Bejelentkezés
-              </h1>
-            </div>
-
-            <form onSubmit={loginSubmitHandler}>
-              <div className="mb-4">
-                <Input
-                  id="email"
-                  type="text"
-                  label="Email"
-                  placeholder="Email"
-                  element="input"
-                  validators={[VALIDATOR_EMAIL()]}
-                  errorText="Add meg az email címed!"
-                  onInput={inputHandler}
-                />
-              </div>
-              <div className="mb-6">
-                <Input
-                  type="password"
-                  id="password"
-                  label="Jelszó"
-                  placeholder="Jelszó"
-                  element="input"
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText="Add meg a jelszavad!"
-                  onInput={inputHandler}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <button
-                  className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  type="submit"
-                >
+                <h1 className="pb-4 text-2xl font-bold text-customBlue">
                   Bejelentkezés
-                </button>
-                <button
-                  className="ml-2 inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
-                  type="button"
-                  onClick={() => setForgotPassword(true)}
-                >
-                  Elfelejtetted a jelszavad?
-                </button>
+                </h1>
               </div>
-              <div className="pt-6">
-                <button
-                  type="button"
-                  className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
-                  onClick={() => navigate("/regisztracio")}
-                >
-                  Nincs még felhasználói fiókod? Regisztrálj!
-                </button>
-              </div>
-            </form>
+
+              <form onSubmit={loginSubmitHandler}>
+                <div className="mb-4">
+                  <Input
+                    id="email"
+                    type="text"
+                    label="Email"
+                    placeholder="Email"
+                    element="input"
+                    validators={[VALIDATOR_EMAIL()]}
+                    errorText="Add meg az email címed!"
+                    onInput={inputHandler}
+                  />
+                </div>
+                <div className="mb-6">
+                  <Input
+                    type="password"
+                    id="password"
+                    label="Jelszó"
+                    placeholder="Jelszó"
+                    element="input"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    errorText="Add meg a jelszavad!"
+                    onInput={inputHandler}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <button
+                    className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit"
+                  >
+                    Bejelentkezés
+                  </button>
+                  <button
+                    className="ml-2 inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
+                    type="button"
+                    onClick={() => setForgotPassword(true)}
+                  >
+                    Elfelejtetted a jelszavad?
+                  </button>
+                </div>
+                <div className="pt-6">
+                  <button
+                    type="button"
+                    className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
+                    onClick={() => navigate("/regisztracio")}
+                  >
+                    Nincs még felhasználói fiókod? Regisztrálj!
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         ) : (
-          <div className="absolute z-10 m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
-            <div className="w-full text-center">
-              {isError && <p>{message}</p>}
-              <h1 className="pb-4 text-2xl font-bold text-customBlue">
-                Új jelszó kérése
-              </h1>
+          <div className="absolute z-10 flex items-center justify-center h-screen w-screen">
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
+              <div className="w-full text-center">
+                {isError && <p>{message}</p>}
+                <h1 className="pb-4 text-2xl font-bold text-customBlue">
+                  Új jelszó kérése
+                </h1>
+              </div>
+
+              <form onSubmit={loginSubmitHandler}>
+                <div className="mb-4">
+                  <Input
+                    id="email"
+                    type="text"
+                    label="Email"
+                    placeholder="Email"
+                    element="input"
+                    validators={[VALIDATOR_EMAIL()]}
+                    errorText="Add meg az email címed!"
+                    onInput={inputHandler}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <button
+                    className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="button"
+                    onClick={() => forgotPasswordHandler()}
+                  >
+                    {"Küldés"}
+                  </button>
+                </div>
+                <div className="pt-6">
+                  <button
+                    type="button"
+                    className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
+                    onClick={() => setForgotPassword(false)}
+                  >
+                    Vissza a bejelentkezésre
+                  </button>
+                </div>
+              </form>
             </div>
-
-            <form onSubmit={loginSubmitHandler}>
-              <div className="mb-4">
-                <Input
-                  id="email"
-                  type="text"
-                  label="Email"
-                  placeholder="Email"
-                  element="input"
-                  validators={[VALIDATOR_EMAIL()]}
-                  errorText="Add meg az email címed!"
-                  onInput={inputHandler}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <button
-                  className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  type="button"
-                  onClick={() => forgotPasswordHandler()}
-                >
-                  {isLoading ? "Küldés..." : "Bejelentkezés"}
-                </button>
-              </div>
-              <div className="pt-6">
-                <button
-                  type="button"
-                  className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
-                  onClick={() => setForgotPassword(false)}
-                >
-                  Vissza a bejelentkezésre
-                </button>
-              </div>
-            </form>
           </div>
         )}
       </div>

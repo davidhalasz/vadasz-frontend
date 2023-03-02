@@ -58,23 +58,25 @@ const Register = () => {
     if (isError) {
       const timer = setTimeout(() => {
         setIsError(false);
-        setMsg('');
+        setMsg("");
       }, 8000);
 
       return () => clearTimeout(timer);
     }
   }, [isError, msg]);
 
-
   const registerSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/regisztracio`, {
-        name: formState.inputs.name.value,
-        email: formState.inputs.email.value,
-        password: formState.inputs.password.value,
-        telephone: formState.inputs.telephone.value,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/user/regisztracio`,
+        {
+          name: formState.inputs.name.value,
+          email: formState.inputs.email.value,
+          password: formState.inputs.password.value,
+          telephone: formState.inputs.telephone.value,
+        }
+      );
       setIsSentEmail(true);
     } catch (error) {
       if (error.response) {
@@ -87,13 +89,15 @@ const Register = () => {
   const resendEmailHandler = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/user/resend-email`, {
+        `${process.env.REACT_APP_BACKEND_URL}/user/resend-email`,
+        {
           email: formState.inputs.email.value,
-        });
+        }
+      );
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div>
@@ -122,85 +126,98 @@ const Register = () => {
         </div>
         <div className="h-full w-full bg-customMint"></div>
         {!isSentEmail ? (
-          <div className="absolute m-auto place-self-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
-            <div className="w-full text-center">
-            <CSSTransition in={isError} timeout={300} nodeRef={nodeRef} classNames="alert">
-                <div ref={nodeRef} className={`${msg !== '' && "p-2 bg-customRed text-white font-bold rounded-md my-2"} `}>
-                  <p>{msg}</p>
-                </div>
-              </CSSTransition>
-              <h1 className="pb-4 text-2xl font-bold text-customBlue">
-                Regisztráció
-              </h1>
-            </div>
+          <div className="absolute z-10 flex items-center justify-center h-screen w-screen">
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-[400px]">
+              <div className="w-full text-center">
+                <CSSTransition
+                  in={isError}
+                  timeout={300}
+                  nodeRef={nodeRef}
+                  classNames="alert"
+                >
+                  <div
+                    ref={nodeRef}
+                    className={`${
+                      msg !== "" &&
+                      "p-2 bg-customRed text-white font-bold rounded-md my-2"
+                    } `}
+                  >
+                    <p>{msg}</p>
+                  </div>
+                </CSSTransition>
+                <h1 className="pb-4 text-2xl font-bold text-customBlue">
+                  Regisztráció
+                </h1>
+              </div>
 
-            <form onSubmit={registerSubmitHandler}>
-              <div className="mb-4">
-                <Input
-                  id="name"
-                  type="text"
-                  label="Név"
-                  placeholder="Név"
-                  element="input"
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText="Add meg a neved!"
-                  onInput={inputHandler}
-                />
-              </div>
-              <div className="mb-4">
-                <Input
-                  type="email"
-                  id="email"
-                  label="Email"
-                  placeholder="Email"
-                  element="input"
-                  validators={[VALIDATOR_EMAIL()]}
-                  errorText="Adj meg egy helyes email címet!"
-                  onInput={inputHandler}
-                />
-              </div>
-              <div className="mb-6">
-                <Input
-                  type="password"
-                  id="password"
-                  label="Jelszó"
-                  placeholder="Jelszó"
-                  element="input"
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText="Add meg a jelszavad!"
-                  onInput={inputHandler}
-                />
-              </div>
-              <div className="mb-6">
-                <Input
-                  type="text"
-                  id="telephone"
-                  label="Telefonszám (opcionális)"
-                  placeholder="Telefonszám"
-                  element="input"
-                  onInput={inputHandler}
-                  validators={[]}
-                  valid={true}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <button
-                  className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  type="submit"
-                >
-                  Regisztrálás
-                </button>
-              </div>
-              <div className="pt-6">
-                <button
-                  type="button"
-                  className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
-                  onClick={() => navigate("/bejelentkezes")}
-                >
-                  Már van fiókod?
-                </button>
-              </div>
-            </form>
+              <form onSubmit={registerSubmitHandler}>
+                <div className="mb-4">
+                  <Input
+                    id="name"
+                    type="text"
+                    label="Név"
+                    placeholder="Név"
+                    element="input"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    errorText="Add meg a neved!"
+                    onInput={inputHandler}
+                  />
+                </div>
+                <div className="mb-4">
+                  <Input
+                    type="email"
+                    id="email"
+                    label="Email"
+                    placeholder="Email"
+                    element="input"
+                    validators={[VALIDATOR_EMAIL()]}
+                    errorText="Adj meg egy helyes email címet!"
+                    onInput={inputHandler}
+                  />
+                </div>
+                <div className="mb-6">
+                  <Input
+                    type="password"
+                    id="password"
+                    label="Jelszó"
+                    placeholder="Jelszó"
+                    element="input"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    errorText="Add meg a jelszavad!"
+                    onInput={inputHandler}
+                  />
+                </div>
+                <div className="mb-6">
+                  <Input
+                    type="text"
+                    id="telephone"
+                    label="Telefonszám (opcionális)"
+                    placeholder="Telefonszám"
+                    element="input"
+                    onInput={inputHandler}
+                    validators={[]}
+                    valid={true}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <button
+                    className="bg-customBlue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit"
+                  >
+                    Regisztrálás
+                  </button>
+                </div>
+                <div className="pt-6">
+                  <button
+                    type="button"
+                    className="inline-block align-baseline font-bold text-sm text-customGreen hover:text-blue-800"
+                    onClick={() => navigate("/bejelentkezes")}
+                  >
+                    Már van fiókod?
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         ) : (
           <CSSTransition
@@ -214,16 +231,24 @@ const Register = () => {
           >
             <div
               ref={nodeRef}
-              className="absolute m-auto place-self-center bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 content-fit"
+              className="absolute z-10 flex items-center justify-center h-screen w-screen"
             >
-              <div className="w-full text-center flex flex-col">
-                <h1 className="text-lg font-bold text-customBlue">
-                  A regisztrációval kapcsolatos további teendőket a megadott
-                  email címre továbbítottuk.
-                </h1>
-                <div className="w-full flex place-content-end mt-2 gap-2">
-                  <p className="place-end">Nem kaptad meg az emailt?</p>
-                  <button type="button" onClick={() => resendEmailHandler()} className="text-customGreen font-bold">Újraküldés</button>
+              <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 content-fit">
+                <div className="w-full text-center flex flex-col">
+                  <h1 className="text-lg font-bold text-customBlue">
+                    A regisztrációval kapcsolatos további teendőket a megadott
+                    email címre továbbítottuk.
+                  </h1>
+                  <div className="w-full flex place-content-end mt-2 gap-2">
+                    <p className="place-end">Nem kaptad meg az emailt?</p>
+                    <button
+                      type="button"
+                      onClick={() => resendEmailHandler()}
+                      className="text-customGreen font-bold"
+                    >
+                      Újraküldés
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
