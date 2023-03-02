@@ -149,7 +149,7 @@ const Home = () => {
             </div>
           </div>
           <div className="py-16 md:py-0 text-center w-full md:text-left md:w-fit px-8 font-extrabold self-center flex flex-col gap-3">
-            <span className="bg-clip-text text-4xl md:text-5xl lg:text-6xl text-transparent bg-customBlue">
+            <span className="bg-clip-text text-4xl md:text-5xl lg:text-6xl text-transparent bg-customBlue pt-8 md:pt-0">
               Vadászhirdető
             </span>
 

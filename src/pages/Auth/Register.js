@@ -10,7 +10,6 @@ import "./alert.css";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_EMAIL,
-  VALIDATOR_TELEPHONE,
 } from "../../shared/util/validators";
 import axios from "axios";
 
@@ -179,9 +178,9 @@ const Register = () => {
                   label="Telefonszám (opcionális)"
                   placeholder="Telefonszám"
                   element="input"
-                  validators={[VALIDATOR_TELEPHONE()]}
-                  errorText="A telefonszámodnak 0 vagy legalább 10 karakterből kell állnia!"
                   onInput={inputHandler}
+                  validators={[]}
+                  valid={true}
                 />
               </div>
               <div className="flex items-center justify-between">
@@ -215,7 +214,7 @@ const Register = () => {
           >
             <div
               ref={nodeRef}
-              className="absolute m-auto place-self-center bg-white shadow-md rounded-full px-8 pt-6 pb-8 mb-4 content-fit"
+              className="absolute m-auto place-self-center bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 content-fit"
             >
               <div className="w-full text-center flex flex-col">
                 <h1 className="text-lg font-bold text-customBlue">
