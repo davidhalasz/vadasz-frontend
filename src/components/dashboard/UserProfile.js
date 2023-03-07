@@ -6,7 +6,6 @@ import "./UserProfile.css";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
-  VALIDATOR_TELEPHONE,
 } from "../../shared/util/validators";
 import axios from "axios";
 import {
@@ -28,7 +27,7 @@ const UserProfile = () => {
     {
       telephone: {
         value: "",
-        isValid: false,
+        isValid: true,
       },
       name: {
         value: user ? user.name : "",
@@ -320,10 +319,11 @@ const UserProfile = () => {
                             <Input
                               id="telephone"
                               type="number"
-                              placeholder="063456789"
-                              validators={[VALIDATOR_TELEPHONE()]}
+                              placeholder="06301456789"
+                              validators={[]}
                               onInput={inputHandler}
                               element="input"
+                              valid={true}
                             />
                           </div>
 

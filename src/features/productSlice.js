@@ -131,9 +131,11 @@ const productSlice = createSlice({
       acc = [];
 
       if (state.filters.showImage) {
-        acc = allProducts.filter(
-          (product) => product.images && product.images.split(", ").length > 0
+        console.log("image filter is true");
+        acc = allProducts.filter(  
+          (product) => product.images && product.images.length > 0
         );
+        console.log(acc);
       } else {
         acc = allProducts.filter((product) => product);
       }
