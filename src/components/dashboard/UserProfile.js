@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isLoading, isSuccess } = useSelector((state) => state.auth);
+  const { user, isLoading } = useSelector((state) => state.auth);
   const [isTelephoneInput, setIsTelephoneInput] = useState(false);
   const [isNameInput, setIsNameInput] = useState(false);
 

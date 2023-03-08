@@ -9,8 +9,6 @@ const CountyFilter = (props) => {
     props.onSaveFilter({ name: "counties", value: event.target.value });
   };
 
-  console.log(filters);
-
   return (
     <Fragment>
       <div className="text-sm font-extrabold mt-4">

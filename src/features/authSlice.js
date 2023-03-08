@@ -79,7 +79,6 @@ export const authSlice = createSlice({
       state.authMessage = payload.message;
     },
     removeAuthMessageHandler(state, action) {
-      console.log("called remove");
       state.isErrorAuth = false;
       state.isSuccessAuth = false;
       state.authMessage = "";

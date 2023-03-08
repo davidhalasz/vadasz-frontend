@@ -37,7 +37,7 @@ const FilterSidebar = () => {
     );
     dispatch(productActions.filteringProducts({ name: name, value: value }));
   };
-
+ 
   const saveBetweenHandler = ({ name, min, max }) => {
     dispatch(productActions.addBetweenData({ name: name, min: min, max: max }));
     dispatch(productActions.filteringProducts({ name: name }));
