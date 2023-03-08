@@ -53,14 +53,11 @@ const UserProfile = () => {
 
   useEffect(() => {
     dispatch(getCurrentUser());
-    console.log("called getcurrent");
   }, [dispatch]);
 
   useEffect(() => {
     if (isLoading === false) {
-      console.log(user);
       if (!user) {
-        console.log("no user");
         navigate("/");
       }
     }
