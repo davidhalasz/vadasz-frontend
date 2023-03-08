@@ -48,7 +48,6 @@ const EditProduct = (props) => {
   const {
     user,
     isLoading,
-    isSuccess,
   } = useSelector((state) => state.auth);
   const [formState, inputHandler] = useForm(
     {

@@ -25,7 +25,6 @@ const Dashboard = () => {
     isErrorAuth,
     authMessage,
     isLoading,
-    isSuccess,
   } = useSelector((state) => state.auth);
   const { isErrorProduct, isSuccessProduct, productMessage } = useSelector(
     (state) => state.products
